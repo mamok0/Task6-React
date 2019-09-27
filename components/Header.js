@@ -1,8 +1,10 @@
-import React from 'react'
-import { Link } from 'react-router';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => (
-  <header class=".navbar bg-dark">
-    <a class="navbar-brand" ><Link to='/'>GifSearch</Link></a>
+  <header className=".navbar bg-dark text-light">
+    <span className="navbar-brand m-2"><Link to="/">GifSearch</Link></span>
   </header>
-)
+);
+
+export default Header;
