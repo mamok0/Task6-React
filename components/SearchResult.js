@@ -46,7 +46,7 @@ class SearchResult extends React.Component {
         moreGifs.data.forEach((gif) => {
           const gifLink = document.createElement('a');
           gifLink.setAttribute('id', 'gif');
-          gifLink.setAttribute('href', '/gif');
+          gifLink.setAttribute('href', `/gif/${gif.id}`);
 
           const gifImg = document.createElement('img');
           gifImg.setAttribute('src', `${gif.images.fixed_height_small.url}`);
@@ -65,9 +65,10 @@ class SearchResult extends React.Component {
 
     if (!window.location.search) {
       window.history.replaceState({}, '', `/search?q=${searchQuery}`);
+      console.log('asdasdasdasdasd');
     }
 
-    const searchForm = <SearchForm key="search-form" inputValue={urlParams.get('q')} />;
+    const searchForm = <SearchForm key="search-form" inputValue={searchQuery} />;
     const searchLabel = React.createElement(
       'h4',
       { className: 'mt-3', key: 'search-label' },

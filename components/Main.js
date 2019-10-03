@@ -9,7 +9,7 @@ const Main = () => (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/search" component={SearchResult} />
-      <Route path="/gif" component={GifPage} />
+      <Route path="/gif/:id" component={GifPage} />
     </Switch>
   </main>
 );

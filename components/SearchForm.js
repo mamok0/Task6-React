@@ -7,13 +7,6 @@ class SearchForm extends React.Component {
     localStorage.setItem('searchInput', document.getElementById('search-input').value);
   }
 
-  clearPage() {
-    const cont = document.getElementById('gif-container');
-    if (cont) {
-      cont.innerHTML = 'gif-container';
-    }
-  }
-
   render() {
     const { inputValue } = this.props;
     return (
@@ -29,7 +22,7 @@ class SearchForm extends React.Component {
           onBlur={this.setSearchInput}
         />
         <Link to={localStorage.searchInput ? `/search?q=${localStorage.searchInput}` : '/search'}>
-          <input type="button" className="btn btn-danger mt-2" value="Search" onClick={this.clearPage} />
+          <input type="button" className="btn btn-danger mt-2" value="Search" />
         </Link>
       </div>
     );

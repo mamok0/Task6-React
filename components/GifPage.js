@@ -21,10 +21,16 @@ class GifPage extends React.PureComponent {
       });
   }
 
+  goBack() {
+    if (document.referrer) {
+      window.history.back();
+    } else {
+      this.props.history.push('/');
+    }
+  }
+
   render() {
-    let gifID = window.location.pathname;
-    gifID = gifID.split('/');
-    gifID = gifID[gifID.length - 1];
+    const gifID = this.props.match.params.id;
     this.loadGifs(gifID);
 
     let gifContainer;
@@ -34,9 +40,9 @@ class GifPage extends React.PureComponent {
     } else {
       const gifImg = React.createElement('video', {
         src: `${gif.images.original.mp4}`,
-        autoPlay: '',
+        autoPlay: true,
         loop: true,
-        muted: '',
+        muted: true,
         className: 'm-3',
         key: 'gif-full-img',
       });
@@ -50,6 +56,7 @@ class GifPage extends React.PureComponent {
           type: 'button',
           className: 'btn btn-success mt-2 mb-4',
           value: 'Okay, let\'s go back',
+          onClick: () => this.goBack(),
           key: 'back-button',
         },
       );
