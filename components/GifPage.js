@@ -1,6 +1,7 @@
 import React from 'react';
 import { getQuery } from './api';
 
+
 class GifPage extends React.PureComponent {
   constructor() {
     super();
@@ -22,7 +23,9 @@ class GifPage extends React.PureComponent {
   }
 
   goBack() {
-    if (document.referrer) {
+    const { state } = this.props.location;
+
+    if (state && state.isValidUrl) {
       window.history.back();
     } else {
       this.props.history.push('/');

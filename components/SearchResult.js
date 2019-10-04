@@ -65,7 +65,6 @@ class SearchResult extends React.Component {
 
     if (!window.location.search) {
       window.history.replaceState({}, '', `/search?q=${searchQuery}`);
-      console.log('asdasdasdasdasd');
     }
 
     const searchForm = <SearchForm key="search-form" inputValue={searchQuery} />;
@@ -92,7 +91,19 @@ class SearchResult extends React.Component {
             className: 'm-1 img-thumbnail',
           },
         );
-        const gifLink = <Link key={`link-${gif.id}`} to={`/gif/${gif.id}`}>{gifImg}</Link>;
+        const gifLink = (
+          <Link
+            key={`link-${gif.id}`}
+            to={
+              {
+                pathname: `/gif/${gif.id}`,
+                state: { isValidUrl: true },
+              }
+               }
+          >
+            {gifImg}
+          </Link>
+        );
         gifsList.push(gifLink);
       });
 
@@ -109,11 +120,13 @@ class SearchResult extends React.Component {
         key: 'more-button',
       },
     );
+
     const searchResult = React.createElement(
       'div',
       { id: 'search-result' },
       [searchForm, searchLabel, gifsContainer, moreButton],
     );
+
     return searchResult;
   }
 }

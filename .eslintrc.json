@@ -24,6 +24,8 @@
     "rules": {
         "linebreak-style": "off",
         "react/jsx-filename-extension": "off",
-        "class-methods-use-this": "off"
+        "class-methods-use-this": "off",
+        "react/prop-types": "off",
+        "react/destructuring-assignment": "off"
     }
 }
