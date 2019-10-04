@@ -2,7 +2,7 @@ import React from 'react';
 import { getQuery } from './api';
 
 
-class GifPage extends React.PureComponent {
+class GifPage extends React.Component {
   constructor() {
     super();
     this.state = {

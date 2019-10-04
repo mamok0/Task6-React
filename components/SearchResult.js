@@ -9,6 +9,8 @@ class SearchResult extends React.Component {
     this.state = {
       gifs: {},
       isFetching: true,
+      isMoreFetching: true,
+      moreGifs: null,
     };
   }
 
@@ -28,9 +30,7 @@ class SearchResult extends React.Component {
       });
   }
 
-  moreGifs() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchQuery = urlParams.get('q') || localStorage.searchInput;
+  loadMoreGifs(searchQuery) {
     const queryParams = {
       q: searchQuery,
       limit: '15',
@@ -42,21 +42,39 @@ class SearchResult extends React.Component {
 
     fetch(`https://api.giphy.com/v1/gifs/search${getQuery(queryParams)}`)
       .then((response) => response.json())
-      .then((moreGifs) => {
-        moreGifs.data.forEach((gif) => {
-          const gifLink = document.createElement('a');
-          gifLink.setAttribute('id', 'gif');
-          gifLink.setAttribute('href', `/gif/${gif.id}`);
-
-          const gifImg = document.createElement('img');
-          gifImg.setAttribute('src', `${gif.images.fixed_height_small.url}`);
-          gifImg.setAttribute('alt', `${gif.title}`);
-          gifImg.setAttribute('class', 'm-1 img-thumbnail');
-          gifLink.appendChild(gifImg);
-
-          document.getElementById('gif-container').appendChild(gifLink);
-        });
+      .then((result) => {
+        this.setState({ moreGifs: result.data, isMoreFetching: false });
       });
+  }
+
+  forgeGifElements(gifs) {
+    const gifsList = [];
+
+    gifs.forEach((gif) => {
+      const gifImg = React.createElement(
+        'img',
+        {
+          src: gif.images.fixed_height_small.url,
+          className: 'm-1 img-thumbnail',
+        },
+      );
+      const gifLink = (
+        <Link
+          key={`link-${gif.id}`}
+          to={
+              {
+                pathname: `/gif/${gif.id}`,
+                state: { isValidUrl: true },
+              }
+               }
+        >
+          {gifImg}
+        </Link>
+      );
+      gifsList.push(gifLink);
+    });
+
+    return gifsList;
   }
 
   render() {
@@ -74,40 +92,37 @@ class SearchResult extends React.Component {
       `Search results for "${searchQuery}":`,
     );
 
-    this.loadGifs(searchQuery);
-    const { gifs, isFetching } = this.state;
+    this.loadGifs(searchQuery, this.state.gifs);
+
+
+    const {
+      gifs,
+      isFetching,
+      moreGifs,
+      isMoreFetching,
+    } = this.state;
     let gifsContainer;
+    const loadingElement = React.createElement('h1', { key: 'loading' }, 'loading...');
 
     if (isFetching) {
-      gifsContainer = React.createElement('h1', { key: 'loading' }, 'loading...');
+      gifsContainer = loadingElement;
     } else {
       const gifsList = [];
 
-      gifs.forEach((gif) => {
-        const gifImg = React.createElement(
-          'img',
-          {
-            src: gif.images.fixed_height_small.url,
-            className: 'm-1 img-thumbnail',
-          },
-        );
-        const gifLink = (
-          <Link
-            key={`link-${gif.id}`}
-            to={
-              {
-                pathname: `/gif/${gif.id}`,
-                state: { isValidUrl: true },
-              }
-               }
-          >
-            {gifImg}
-          </Link>
-        );
-        gifsList.push(gifLink);
-      });
+      gifsList.push(this.forgeGifElements(gifs));
 
       gifsContainer = React.createElement('div', { id: 'gif-container', key: 'gif-container' }, gifsList);
+    }
+
+    let MoreGifsContainer;
+    if (moreGifs) {
+      if (isMoreFetching) {
+        MoreGifsContainer = loadingElement;
+      } else {
+        MoreGifsContainer = React.createElement('div', { key: 'more-gifs-container' }, this.forgeGifElements(moreGifs));
+      }
+    } else {
+      MoreGifsContainer = null;
     }
 
     const moreButton = React.createElement(
@@ -115,7 +130,7 @@ class SearchResult extends React.Component {
       {
         type: 'button',
         className: 'btn btn-success mt-2 mb-4',
-        onClick: this.moreGifs,
+        onClick: () => this.loadMoreGifs(searchQuery),
         value: 'More gifs!',
         key: 'more-button',
       },
@@ -124,7 +139,7 @@ class SearchResult extends React.Component {
     const searchResult = React.createElement(
       'div',
       { id: 'search-result' },
-      [searchForm, searchLabel, gifsContainer, moreButton],
+      [searchForm, searchLabel, gifsContainer, MoreGifsContainer, moreButton],
     );
 
     return searchResult;
