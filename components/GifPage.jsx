@@ -1,19 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { getQuery } from './api';
 
 
 class GifPage extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      gif: {},
-      isFetching: true,
-    };
-  }
+  state = {
+    gif: {},
+    isFetching: true,
+  };
+
 
   componentDidMount() {
-    fetch(`https://api.giphy.com/v1/gifs/${this.props.match.params.id + getQuery({ api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2' })}`)
+    const { match } = this.props;
+    const { params } = match;
+    const { id } = params;
+    fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({ api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2' })}`)
       .then((response) => response.json())
       .then((gifData) => {
         this.setState({
@@ -24,12 +26,13 @@ class GifPage extends React.Component {
   }
 
   goBack() {
-    const { state } = this.props.location;
+    const { location, history } = this.props;
+    const { state } = location;
 
     if (state && state.isValidUrl) {
-      window.history.back();
+      history.go(-1);
     } else {
-      this.props.history.push('/');
+      history.push('/');
     }
   }
 
@@ -67,5 +70,17 @@ class GifPage extends React.Component {
     return gifContainer;
   }
 }
+
+GifPage.propTypes = {
+  match: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object,
+};
+
+GifPage.defaultProps = {
+  match: {},
+  location: {},
+  history: {},
+};
 
 export default GifPage;

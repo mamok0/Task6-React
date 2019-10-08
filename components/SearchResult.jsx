@@ -6,22 +6,20 @@ import { getQuery, getSearchQuery } from './api';
 import Loading from './Loading';
 
 class SearchResult extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      searchInput: localStorage.searchInput,
-      gifs: {},
-      isFetching: true,
-      isMoreFetching: true,
-      moreGifs: null,
-    };
-  }
+  state = {
+    searchInput: localStorage.searchInput,
+    gifs: {},
+    isFetching: true,
+    isMoreFetching: true,
+    moreGifs: null,
+  };
+
 
   componentDidMount() {
     this.loadGifs();
   }
 
-  loadGifs() {
+  loadGifs = () => {
     const queryParams = {
       q: encodeURI(getSearchQuery()),
       limit: '15',
@@ -37,7 +35,7 @@ class SearchResult extends React.PureComponent {
       });
   }
 
-  loadMoreGifs() {
+  loadMoreGifs = () => {
     const gifsAmount = document.querySelectorAll('img').length;
 
     const queryParams = {
@@ -56,7 +54,7 @@ class SearchResult extends React.PureComponent {
       });
   }
 
-  forgeGifElements(gifs) {
+  forgeGifElements = (gifs) => {
     const gifsList = [];
 
     gifs.forEach((gif) => {
@@ -89,7 +87,15 @@ class SearchResult extends React.PureComponent {
   render() {
     const searchQuery = getSearchQuery();
 
-    if (this.state.searchInput !== searchQuery) {
+    const {
+      gifs,
+      isFetching,
+      moreGifs,
+      isMoreFetching,
+      searchInput,
+    } = this.state;
+
+    if (searchInput !== searchQuery) {
       this.setState({ searchInput: searchQuery });
       this.loadGifs();
     }
@@ -103,13 +109,6 @@ class SearchResult extends React.PureComponent {
       { className: 'mt-3', key: 'search-label' },
       `Search results for "${searchQuery}":`,
     );
-
-    const {
-      gifs,
-      isFetching,
-      moreGifs,
-      isMoreFetching,
-    } = this.state;
 
     let gifsContainer;
     const gifsList = [];

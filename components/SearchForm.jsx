@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class SearchForm extends React.Component {
   setSearchInput() {
-    localStorage.setItem('searchInput', document.getElementById('search-input').value);
+    this.localStorage.setItem('searchInput', document.getElementById('search-input').value);
   }
 
   render() {
