@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class SearchForm extends React.Component {
-  setSearchInput() {
-    this.localStorage.setItem('searchInput', document.getElementById('search-input').value);
+  setSearchInput = () => {
+    localStorage.setItem('searchInput', document.getElementById('search-input').value);
   }
 
   render() {
