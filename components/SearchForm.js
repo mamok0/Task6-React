@@ -9,6 +9,7 @@ class SearchForm extends React.Component {
 
   render() {
     const { inputValue } = this.props;
+
     return (
       <div id="search-form" className="container text-center mt-3">
         <h3>Type what are you want to find:</h3>
@@ -17,11 +18,11 @@ class SearchForm extends React.Component {
           type="text"
           className="form-control"
           defaultValue={
-            inputValue || ''
+            inputValue
           }
           onBlur={this.setSearchInput}
         />
-        <Link to={localStorage.searchInput ? `/search?q=${localStorage.searchInput}` : '/search'}>
+        <Link to="/search">
           <input type="button" className="btn btn-danger mt-2" value="Search" />
         </Link>
       </div>

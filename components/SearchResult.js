@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SearchForm from './SearchForm';
-import { getQuery } from './api';
+import { getQuery, getSearchQuery } from './api';
 
-class SearchResult extends React.Component {
+class SearchResult extends React.PureComponent {
   constructor() {
     super();
     this.state = {
+      searchInput: localStorage.searchInput,
       gifs: {},
       isFetching: true,
       isMoreFetching: true,
@@ -14,9 +15,13 @@ class SearchResult extends React.Component {
     };
   }
 
-  loadGifs(searchQuery) {
+  componentDidMount() {
+    this.loadGifs();
+  }
+
+  loadGifs() {
     const queryParams = {
-      q: encodeURI(searchQuery),
+      q: encodeURI(getSearchQuery()),
       limit: '15',
       offset: '0',
       rating: 'G',
@@ -30,11 +35,13 @@ class SearchResult extends React.Component {
       });
   }
 
-  loadMoreGifs(searchQuery) {
+  loadMoreGifs() {
+    const gifsAmount = document.getElementsByTagName('img').length;
+
     const queryParams = {
-      q: searchQuery,
-      limit: '15',
-      offset: document.getElementsByTagName('img').length,
+      q: getSearchQuery(),
+      limit: gifsAmount,
+      offset: '15',
       rating: 'G',
       lang: 'en',
       api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2',
@@ -78,12 +85,16 @@ class SearchResult extends React.Component {
   }
 
   render() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchQuery = urlParams.get('q') || localStorage.searchInput;
+    const searchQuery = getSearchQuery();
 
-    if (!window.location.search) {
-      window.history.replaceState({}, '', `/search?q=${searchQuery}`);
+    if (this.state.searchInput !== searchQuery) {
+      this.setState({ searchInput: searchQuery });
+      this.loadGifs();
     }
+    console.log('a');
+
+    window.history.replaceState({}, '', `/search?q=${searchQuery}`);
+
 
     const searchForm = <SearchForm key="search-form" inputValue={searchQuery} />;
     const searchLabel = React.createElement(
@@ -91,9 +102,6 @@ class SearchResult extends React.Component {
       { className: 'mt-3', key: 'search-label' },
       `Search results for "${searchQuery}":`,
     );
-
-    this.loadGifs(searchQuery, this.state.gifs);
-
 
     const {
       gifs,
@@ -103,27 +111,33 @@ class SearchResult extends React.Component {
     } = this.state;
     let gifsContainer;
     const loadingElement = React.createElement('h1', { key: 'loading' }, 'loading...');
+    const gifsList = [];
 
     if (isFetching) {
       gifsContainer = loadingElement;
-    } else {
-      const gifsList = [];
 
-      gifsList.push(this.forgeGifElements(gifs));
-
-      gifsContainer = React.createElement('div', { id: 'gif-container', key: 'gif-container' }, gifsList);
+      const searchResult = React.createElement(
+        'div',
+        { id: 'search-result' },
+        [searchForm, searchLabel, gifsContainer],
+      );
+      return searchResult;
     }
+
+    gifsList.push(this.forgeGifElements(gifs));
 
     let MoreGifsContainer;
     if (moreGifs) {
       if (isMoreFetching) {
         MoreGifsContainer = loadingElement;
       } else {
-        MoreGifsContainer = React.createElement('div', { key: 'more-gifs-container' }, this.forgeGifElements(moreGifs));
+        gifsList.push(this.forgeGifElements(moreGifs));
       }
     } else {
       MoreGifsContainer = null;
     }
+
+    gifsContainer = React.createElement('div', { id: 'gif-container', key: 'gif-container' }, gifsList);
 
     const moreButton = React.createElement(
       'input',

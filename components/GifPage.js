@@ -11,8 +11,8 @@ class GifPage extends React.Component {
     };
   }
 
-  loadGifs(gifID) {
-    fetch(`https://api.giphy.com/v1/gifs/${gifID + getQuery({ api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2' })}`)
+  componentDidMount() {
+    fetch(`https://api.giphy.com/v1/gifs/${this.props.match.params.id + getQuery({ api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2' })}`)
       .then((response) => response.json())
       .then((gifData) => {
         this.setState({
@@ -33,9 +33,6 @@ class GifPage extends React.Component {
   }
 
   render() {
-    const gifID = this.props.match.params.id;
-    this.loadGifs(gifID);
-
     let gifContainer;
     const { gif, isFetching } = this.state;
     if (isFetching) {

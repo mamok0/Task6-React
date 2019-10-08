@@ -8,8 +8,9 @@ export function getQuery(queryParams) {
   return url;
 }
 
-export function getSearchQuery(searchInput) {
-  return `/JS-Basics-and-DOM/search${getQuery({ q: searchInput })}`;
+export function getSearchQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('q') || localStorage.searchInput;
 }
 
 export async function getGifs(searchInputValue) {
