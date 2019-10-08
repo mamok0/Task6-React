@@ -41,8 +41,8 @@ export async function getMoreGifs(urlParams) {
   return gifsList;
 }
 
-export async function getGif(id, urlParams) {
-  const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery(urlParams)}`);
+export async function getGif(id) {
+  const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({ api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2' })}`);
   const gif = response.json();
   return gif;
 }
