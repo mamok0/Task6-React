@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import SearchForm from './SearchForm';
 import { getQuery, getSearchQuery } from './api';
+import Loading from './Loading';
 
 class SearchResult extends React.PureComponent {
   constructor() {
@@ -36,7 +38,7 @@ class SearchResult extends React.PureComponent {
   }
 
   loadMoreGifs() {
-    const gifsAmount = document.getElementsByTagName('img').length;
+    const gifsAmount = document.querySelectorAll('img').length;
 
     const queryParams = {
       q: getSearchQuery(),
@@ -91,7 +93,6 @@ class SearchResult extends React.PureComponent {
       this.setState({ searchInput: searchQuery });
       this.loadGifs();
     }
-    console.log('a');
 
     window.history.replaceState({}, '', `/search?q=${searchQuery}`);
 
@@ -109,12 +110,12 @@ class SearchResult extends React.PureComponent {
       moreGifs,
       isMoreFetching,
     } = this.state;
+
     let gifsContainer;
-    const loadingElement = React.createElement('h1', { key: 'loading' }, 'loading...');
     const gifsList = [];
 
     if (isFetching) {
-      gifsContainer = loadingElement;
+      gifsContainer = <Loading />;
 
       const searchResult = React.createElement(
         'div',
@@ -129,7 +130,7 @@ class SearchResult extends React.PureComponent {
     let MoreGifsContainer;
     if (moreGifs) {
       if (isMoreFetching) {
-        MoreGifsContainer = loadingElement;
+        MoreGifsContainer = <Loading />;
       } else {
         gifsList.push(this.forgeGifElements(moreGifs));
       }
