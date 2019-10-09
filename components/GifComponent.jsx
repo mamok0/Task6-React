@@ -11,10 +11,9 @@ class GifComponent extends React.Component {
   };
 
   async componentDidMount() {
-    const { match } = this.props;
-    const { params } = match;
-    const { id } = params;
+    const { id } = this.props;
     const gifData = await getGif(id);
+
     this.setState({
       gif: gifData.data,
       isFetching: false,
@@ -23,9 +22,11 @@ class GifComponent extends React.Component {
 
   render() {
     const { gif, isFetching } = this.state;
+
     if (isFetching) {
       return <Loading />;
     }
+
     const gifImg = (
       <video
         src={`${gif.images.original.mp4}`}
@@ -49,17 +50,13 @@ class GifComponent extends React.Component {
   }
 }
 
-
 GifComponent.propTypes = {
-  match: PropTypes.object,
-  location: PropTypes.object,
-  history: PropTypes.object,
+  id: PropTypes.string,
 };
 
 GifComponent.defaultProps = {
-  match: {},
-  location: {},
-  history: {},
+  id: '',
 };
+
 
 export default GifComponent;

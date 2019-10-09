@@ -2,9 +2,6 @@ import React from 'react';
 
 import SearchForm from './SearchForm';
 
-const Home = () => {
-  localStorage.removeItem('searchInput');
-  return <SearchForm />;
-};
+const Home = () => <SearchForm />;
 
 export default Home;

@@ -1,43 +1,33 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import GifComponent from './GifComponent';
+import BackButton from './BackButton';
 
-class GifPage extends React.Component {
-
-
-  goBack() {
-    const { location, history } = this.props;
-    const { state } = location;
-
-    if (state && state.isValidUrl) {
-      history.go(-1);
-    } else {
-      history.push('/');
-    }
-  }
-
+class GifPage extends React.PureComponent {
   render() {
-    const gif = <GifComponent />;
-
-    const moreButton = (
-      <input
-        type="button"
-        className="btn btn-success mt-2 mb-4"
-        value="Okay, let\'s go back"
-        onClick={() => this.goBack()}
-        key="back-button"
-      />
-    );
-
-    const gifContainer = [gif, moreButton];
+    const { match, location } = this.props;
+    const { state } = location;
+    const { params } = match;
+    const { id } = params;
 
     return (
       <div id="gif-container">
-        {gifContainer}
+        <GifComponent id={id} />
+        <BackButton referrer={state ? state.isValidUrl : false} />
       </div>
     );
   }
 }
 
+GifPage.propTypes = {
+  match: PropTypes.object,
+  location: PropTypes.object,
+};
+
+GifPage.defaultProps = {
+  match: {},
+  location: {},
+};
 
 export default GifPage;
