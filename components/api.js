@@ -9,12 +9,13 @@ export function getQuery(queryParams) {
 }
 
 export function getSearchQuery() {
-  return localStorage.searchInput;
+  const searchParams = new URLSearchParams(window.location.search);
+  return searchParams.get('q');
 }
 
-export async function getGifs() {
+export async function getGifs(requestValue) {
   const queryParams = {
-    q: encodeURI(getSearchQuery()),
+    q: encodeURI(requestValue),
     limit: '15',
     offset: '0',
     rating: 'G',

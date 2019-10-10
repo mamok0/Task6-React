@@ -1,33 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 
-class BackButton extends React.Component {
-  state = {
-    isRedirect: false,
-  }
 
-  goBack() {
-    const { referrer } = this.props;
-    const { isRedirect } = this.state;
-    if (isRedirect) {
-      if (referrer) {
-        window.history.go(-1);
-      }
-      return <Redirect to="/" />;
-    }
-    return '';
-  }
-
+class BackButton extends React.PureComponent {
   render() {
+    const { onRedirect } = this.props;
     return (
       <div>
-        {this.goBack()}
         <input
           type="button"
           className="btn btn-success mt-2 mb-4"
           value="Okay, let's go back"
-          onClick={() => this.setState({ isRedirect: true })}
+          onClick={() => onRedirect()}
           key="back-button"
         />
       </div>
@@ -36,11 +20,11 @@ class BackButton extends React.Component {
 }
 
 BackButton.propTypes = {
-  referrer: PropTypes.bool,
+  onRedirect: PropTypes.func,
 };
 
 BackButton.defaultProps = {
-  referrer: false,
+  onRedirect: () => {},
 };
 
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Home from './Home';
-import SearchResult from './SearchResult';
-import GifPage from './GifPage';
+import Home from './HomeContainer';
+import SearchResult from './SearchResultContainer';
+import GifPage from './GifPageContainer';
 
 const Main = () => (
   <main>

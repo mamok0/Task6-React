@@ -1,27 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { getGif } from './api';
+
 import Loading from './Loading';
 
-class GifComponent extends React.Component {
-  state = {
-    gif: {},
-    isFetching: true,
-  };
-
-  async componentDidMount() {
-    const { id } = this.props;
-    const gifData = await getGif(id);
-
-    this.setState({
-      gif: gifData.data,
-      isFetching: false,
-    });
-  }
-
+class GifComponent extends React.PureComponent {
   render() {
-    const { gif, isFetching } = this.state;
+    const { gifData } = this.props;
+    const { gif, isFetching } = gifData;
 
     if (isFetching) {
       return <Loading />;
@@ -51,11 +37,11 @@ class GifComponent extends React.Component {
 }
 
 GifComponent.propTypes = {
-  id: PropTypes.string,
+  gifData: PropTypes.object,
 };
 
 GifComponent.defaultProps = {
-  id: '',
+  gifData: {},
 };
 
 

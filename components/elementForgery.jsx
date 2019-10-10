@@ -21,7 +21,7 @@ function forgeGifElements(gifs) {
               pathname: `/gif/${gif.id}`,
               state: { isValidUrl: true },
             }
-             }
+        }
       >
         {gifImg}
       </Link>
