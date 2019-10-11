@@ -6,7 +6,7 @@ import Loading from './Loading';
 class MoreGifsComponent extends React.PureComponent {
   render() {
     const { moreGifsData } = this.props;
-    const { gifsOffset, isMoreFetching, moreGifs} = moreGifsData;
+    const { gifsOffset, isMoreFetching, moreGifs } = moreGifsData;
 
     if (gifsOffset === 0) {
       return '';
@@ -25,11 +25,11 @@ class MoreGifsComponent extends React.PureComponent {
 }
 
 MoreGifsComponent.propTypes = {
-
+  moreGifsData: PropTypes.object,
 };
 
 MoreGifsComponent.defaultProps = {
-
+  moreGifsData: {},
 };
 
 export default MoreGifsComponent;
