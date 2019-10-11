@@ -5,11 +5,10 @@ import Loading from './Loading';
 
 class MoreGifsComponent extends React.PureComponent {
   render() {
-    const { moreGifsData } = this.props;
-    const { gifsOffset, isMoreFetching, moreGifs } = moreGifsData;
+    const { gifsOffset, isMoreFetching, moreGifs } = this.props;
 
     if (gifsOffset === 0) {
-      return '';
+      return null;
     }
 
     if (isMoreFetching) {
@@ -25,11 +24,15 @@ class MoreGifsComponent extends React.PureComponent {
 }
 
 MoreGifsComponent.propTypes = {
-  moreGifsData: PropTypes.object,
+  isMoreFetching: PropTypes.bool,
+  moreGifs: PropTypes.arrayOf(PropTypes.array),
+  gifsOffset: PropTypes.number,
 };
 
 MoreGifsComponent.defaultProps = {
-  moreGifsData: {},
+  isMoreFetching: true,
+  moreGifs: {},
+  gifsOffset: 0,
 };
 
 export default MoreGifsComponent;

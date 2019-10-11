@@ -5,8 +5,7 @@ import Loading from './Loading';
 
 class GifsComponent extends React.PureComponent {
   render() {
-    const { gifsData } = this.props;
-    const { isFetching, gifs, searchInput } = gifsData;
+    const { isFetching, gifs, searchInput } = this.props;
     if (isFetching) {
       return <Loading />;
     }
@@ -24,11 +23,15 @@ class GifsComponent extends React.PureComponent {
 }
 
 GifsComponent.propTypes = {
-  gifsData: PropTypes.object,
+  isFetching: PropTypes.bool,
+  gifs: PropTypes.arrayOf(PropTypes.object),
+  searchInput: PropTypes.string,
 };
 
 GifsComponent.defaultProps = {
-  gifsData: {},
+  isFetching: true,
+  gifs: {},
+  searchInput: '',
 };
 
 export default GifsComponent;

@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function forgeGifElements(gifs) {
-  const gifsList = [];
-
-  gifs.forEach((gif) => {
+  const gifsList = gifs.map((gif) => {
     const gifImg = (
       <img
         src={gif.images.fixed_height_small.url}
@@ -26,7 +24,7 @@ function forgeGifElements(gifs) {
         {gifImg}
       </Link>
     );
-    gifsList.push(gifLink);
+    return gifLink;
   });
 
   return gifsList;

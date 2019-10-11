@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Button from './DefaultButton';
 
 class BackButton extends React.PureComponent {
   render() {
     const { onRedirect } = this.props;
     return (
       <div>
-        <input
-          type="button"
+        <Button
           className="btn btn-success mt-2 mb-4"
-          value="Okay, let's go back"
-          onClick={() => onRedirect()}
-          key="back-button"
+          handleClick={() => onRedirect()}
+          buttonText="Okay, let's go back"
         />
       </div>
     );

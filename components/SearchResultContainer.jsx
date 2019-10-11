@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import SearchForm from './SearchForm';
 import GifsComponent from './Gifs';
 import MoreGifsComponent from './MoreGifs';
+import Button from './DefaultButton';
 import { getGifs, getMoreGifs, getSearchQuery } from './api';
 import forgeGifElements from './elementForgery';
 
@@ -15,8 +16,7 @@ class SearchResult extends React.PureComponent {
     isFetching: true,
     isMoreFetching: true,
     moreGifs: [],
-    redirect: null,
-    newSearchRequest: false,
+    isRedirect: false,
   };
 
   componentDidMount() {
@@ -24,12 +24,17 @@ class SearchResult extends React.PureComponent {
   }
 
   handleRequest = () => {
-    const newSearchTerm = document.getElementById('search-input').value;
+    const newSearchTerm = this.inputElement.value;
     this.setState({
       searchInput: newSearchTerm,
-      redirect: <Redirect to={`/search?q=${newSearchTerm}`} />,
-      newSearchRequest: true,
+      isRedirect: true,
+      isNewSearchRequest: true,
     });
+  }
+
+  redirect() {
+    const { isRedirect } = this.state;
+    return isRedirect ? <Redirect to={`/search?q=${this.inputElement.value}`} /> : null;
   }
 
   async loadGifs() {
@@ -40,7 +45,7 @@ class SearchResult extends React.PureComponent {
     this.setState({
       gifs: gifsElements,
       isFetching: false,
-      newSearchRequest: false,
+      isNewSearchRequest: false,
       isMoreFetching: true,
       moreGifs: [],
       gifsOffset: 0,
@@ -61,6 +66,10 @@ class SearchResult extends React.PureComponent {
     });
   }
 
+  getSearchElement = (element) => {
+    this.inputElement = element;
+  }
+
   render() {
     const {
       searchInput,
@@ -69,11 +78,10 @@ class SearchResult extends React.PureComponent {
       isFetching,
       moreGifs,
       isMoreFetching,
-      redirect,
-      newSearchRequest,
+      isNewSearchRequest,
     } = this.state;
 
-    if (newSearchRequest) {
+    if (isNewSearchRequest) {
       this.loadGifs();
     }
 
@@ -82,16 +90,23 @@ class SearchResult extends React.PureComponent {
         <SearchForm
           onRequest={this.handleRequest}
           inputValue={searchInput}
+          getInputValue={this.getSearchElement}
         />
-        {redirect}
-        <GifsComponent gifsData={{ gifs, isFetching, searchInput }} />
-        <MoreGifsComponent moreGifsData={{ gifsOffset, moreGifs, isMoreFetching }} />
-        <input
-          type="button"
+        {this.redirect()}
+        <GifsComponent
+          gifs={gifs}
+          isFetching={isFetching}
+          searchInput={searchInput}
+        />
+        <MoreGifsComponent
+          gifsOffset={gifsOffset}
+          moreGifs={moreGifs}
+          isMoreFetching={isMoreFetching}
+        />
+        <Button
           className="btn btn-success mt-2 mb-4"
-          value="More gifs!"
-          onClick={() => this.loadMoreGifs(gifsOffset + 15)}
-          key="more-button"
+          handleClick={() => this.loadMoreGifs(gifsOffset + 15)}
+          buttonText="More gifs!"
         />
       </div>
     );
