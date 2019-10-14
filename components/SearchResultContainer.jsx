@@ -5,7 +5,12 @@ import SearchForm from './SearchForm';
 import GifsComponent from './Gifs';
 import MoreGifsComponent from './MoreGifs';
 import Button from './DefaultButton';
-import { getGifs, getMoreGifs, getSearchQuery } from './api';
+import {
+  getGifs,
+  getMoreGifs,
+  getSearchQuery,
+  setRef,
+} from './api';
 import forgeGifElements from './elementForgery';
 
 class SearchResult extends React.PureComponent {
@@ -19,12 +24,14 @@ class SearchResult extends React.PureComponent {
     isRedirect: false,
   };
 
+  setRef = setRef.bind(this);
+
   componentDidMount() {
     this.loadGifs();
   }
 
   handleRequest = () => {
-    const newSearchTerm = this.inputElement.value;
+    const newSearchTerm = this.childRef.value;
     this.setState({
       searchInput: newSearchTerm,
       isRedirect: true,
@@ -34,7 +41,7 @@ class SearchResult extends React.PureComponent {
 
   redirect() {
     const { isRedirect } = this.state;
-    return isRedirect ? <Redirect to={`/search?q=${this.inputElement.value}`} /> : null;
+    return isRedirect ? <Redirect to={`/search?q=${this.childRef.value}`} /> : null;
   }
 
   async loadGifs() {
@@ -66,9 +73,6 @@ class SearchResult extends React.PureComponent {
     });
   }
 
-  getSearchElement = (element) => {
-    this.inputElement = element;
-  }
 
   render() {
     const {
@@ -88,9 +92,9 @@ class SearchResult extends React.PureComponent {
     return (
       <div id="search-result">
         <SearchForm
-          onRequest={this.handleRequest}
+          handleClick={this.handleRequest}
           inputValue={searchInput}
-          getInputValue={this.getSearchElement}
+          setInput={this.setRef}
         />
         {this.redirect()}
         <GifsComponent

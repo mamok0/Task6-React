@@ -10,7 +10,7 @@ class BackButton extends React.PureComponent {
       <div>
         <Button
           className="btn btn-success mt-2 mb-4"
-          handleClick={() => onRedirect()}
+          handleClick={onRedirect}
           buttonText="Okay, let's go back"
         />
       </div>

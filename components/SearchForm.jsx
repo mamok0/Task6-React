@@ -4,14 +4,14 @@ import Button from './DefaultButton';
 
 class SearchForm extends React.PureComponent {
   render() {
-    const { inputValue, onRequest, getInputValue } = this.props;
+    const { inputValue, handleClick, setInput } = this.props;
 
     return (
       <div id="search-form" className="container text-center mt-3">
         <h3>Type what are you want to find:</h3>
         <input
           id="search-input"
-          ref={getInputValue}
+          ref={setInput}
           type="text"
           className="form-control"
           defaultValue={
@@ -20,11 +20,7 @@ class SearchForm extends React.PureComponent {
         />
         <Button
           className="btn btn-danger mt-2 mb-4"
-          callback={() => {
-            if (onRequest) {
-              onRequest();
-            }
-          }}
+          handleClick={handleClick}
           buttonText="Search"
         />
       </div>
@@ -34,14 +30,14 @@ class SearchForm extends React.PureComponent {
 
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
-  onRequest: PropTypes.func,
-  getInputValue: PropTypes.func,
+  handleClick: PropTypes.func,
+  setInput: () => {},
 };
 
 SearchForm.defaultProps = {
   inputValue: '',
-  onRequest: () => {},
-  getInputValue: () => {},
+  handleClick: () => {},
+  setInput: () => {},
 };
 
 export default SearchForm;

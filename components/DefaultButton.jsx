@@ -9,7 +9,7 @@ class Button extends React.PureComponent {
         <button
           type="button"
           className={`${className}`}
-          onClick={() => handleClick()}
+          onClick={handleClick}
         >
           {buttonText}
         </button>
@@ -19,13 +19,13 @@ class Button extends React.PureComponent {
 }
 
 Button.propTypes = {
-  callback: PropTypes.func,
+  handleClick: PropTypes.func,
   className: PropTypes.string,
   buttonText: PropTypes.string,
 };
 
 Button.defaultProps = {
-  callback: () => {},
+  handleClick: () => {},
   className: '',
   buttonText: '',
 };

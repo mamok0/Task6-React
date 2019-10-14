@@ -23,6 +23,6 @@
     ],
     "rules": {
         "linebreak-style": "off",
-        "react/state-in-constructor": ["enabled", "never"]
+        "react/state-in-constructor": [2, "never"]
     }
 }

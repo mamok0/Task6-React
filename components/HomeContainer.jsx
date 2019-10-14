@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SearchForm from './SearchForm';
-import { createSearchLink } from './api';
+import { createSearchLink, setRef } from './api';
 
 class Home extends React.Component {
   state = {
@@ -10,26 +10,38 @@ class Home extends React.Component {
     isSearchRequest: false,
   }
 
+  setRef = setRef.bind(this);
+
+  setRef(input) {
+    this.childRef = input;
+  }
+
   handleRequest = () => {
     const { history } = this.props;
-    history.push(createSearchLink(this.inputElement.value));
+    history.push(createSearchLink(this.childRef.value));
+  }
+
+  getSearchElement = (element) => {
+    this.inputElement = element;
   }
 
   render() {
     const { searchInput, isSearchRequest } = this.state;
     return (
       <SearchForm
-        handleClick={() => this.handleRequest()}
+        handleClick={this.handleRequest}
         inputValue={searchInput}
         isNextRequest={isSearchRequest}
-        getInputValue={(el) => this.inputElement = el}
+        setInput={this.setRef}
       />
     );
   }
 }
 
 Home.propTypes = {
-  history: PropTypes.object,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
 };
 
 Home.defaultProps = {

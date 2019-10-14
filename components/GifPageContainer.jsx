@@ -59,11 +59,17 @@ GifPage.propTypes = {
       id: PropTypes.string,
     }),
   }),
+  location: PropTypes.shape({
+    state: PropTypes.shape({
+      isValidUrl: PropTypes.bool,
+    }),
+  }),
 };
 
 GifPage.defaultProps = {
   match: {},
   history: {},
+  location: {},
 };
 
 export default GifPage;

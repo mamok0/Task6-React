@@ -43,6 +43,10 @@ export function createSearchLink(searchTerm) {
   return `/search?q=${searchTerm}`;
 }
 
+export function setRef(input) {
+  this.childRef = input;
+}
+
 
 export default {
   getGifs,
@@ -51,4 +55,5 @@ export default {
   getQuery,
   getSearchQuery,
   createSearchLink,
+  setRef,
 };
