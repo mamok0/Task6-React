@@ -1,14 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class SearchForm extends React.Component {
-  setSearchInput() {
-    localStorage.setItem('searchInput', document.getElementById('search-input').value);
-  }
-
+class SearchForm extends React.PureComponent {
   render() {
-    const { inputValue } = this.props;
+    const { inputValue, onRequest } = this.props;
 
     return (
       <div id="search-form" className="container text-center mt-3">
@@ -20,11 +15,17 @@ class SearchForm extends React.Component {
           defaultValue={
             inputValue
           }
-          onBlur={this.setSearchInput}
         />
-        <Link to="/search">
-          <input type="button" className="btn btn-danger mt-2" value="Search" />
-        </Link>
+        <input
+          type="button"
+          className="btn btn-danger mt-2"
+          onClick={() => {
+            if (onRequest) {
+              onRequest();
+            }
+          }}
+          value="Search"
+        />
       </div>
     );
   }
@@ -32,10 +33,12 @@ class SearchForm extends React.Component {
 
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
+  onRequest: PropTypes.func,
 };
 
 SearchForm.defaultProps = {
   inputValue: '',
+  onRequest: () => {},
 };
 
 export default SearchForm;

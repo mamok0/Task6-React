@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: ['babel-polyfill', './index.js'],
+  entry: ['babel-polyfill', './index.jsx'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index_bundle.js',
@@ -9,9 +9,12 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.(js)$/, use: 'babel-loader' },
+      { test: /\.(js|jsx)$/, use: 'babel-loader' },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
   mode: 'development',
   devtool: 'inline-source-map',
