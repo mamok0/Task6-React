@@ -31,14 +31,6 @@ class SearchResult extends React.PureComponent {
   }
 
   handleRequest = () => {
-    const newSearchTerm = this.childRef.value;
-    this.setState({
-      searchInput: newSearchTerm,
-      isNewSearchRequest: true,
-    });
-  }
-
-  redirect = () => {
     const { history } = this.props;
     history.push(createSearchLink(this.childRef.value));
     this.setState({
@@ -93,7 +85,7 @@ class SearchResult extends React.PureComponent {
     return (
       <div id="search-result">
         <SearchForm
-          handleClick={this.redirect}
+          handleClick={this.handleRequest}
           inputValue={searchInput}
           setInput={this.setRef}
         />
