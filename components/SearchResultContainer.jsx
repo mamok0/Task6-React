@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import SearchForm from './SearchForm';
 import GifsComponent from './Gifs';
@@ -10,6 +10,7 @@ import {
   getMoreGifs,
   getSearchQuery,
   setRef,
+  createSearchLink,
 } from './api';
 import forgeGifElements from './elementForgery';
 
@@ -21,7 +22,6 @@ class SearchResult extends React.PureComponent {
     isFetching: true,
     isMoreFetching: true,
     moreGifs: [],
-    isRedirect: false,
   };
 
   setRef = setRef.bind(this);
@@ -34,14 +34,17 @@ class SearchResult extends React.PureComponent {
     const newSearchTerm = this.childRef.value;
     this.setState({
       searchInput: newSearchTerm,
-      isRedirect: true,
       isNewSearchRequest: true,
     });
   }
 
-  redirect() {
-    const { isRedirect } = this.state;
-    return isRedirect ? <Redirect to={`/search?q=${this.childRef.value}`} /> : null;
+  redirect = () => {
+    const { history } = this.props;
+    history.push(createSearchLink(this.childRef.value));
+    this.setState({
+      searchInput: this.childRef.value,
+      isNewSearchRequest: true,
+    });
   }
 
   async loadGifs() {
@@ -73,7 +76,6 @@ class SearchResult extends React.PureComponent {
     });
   }
 
-
   render() {
     const {
       searchInput,
@@ -84,7 +86,6 @@ class SearchResult extends React.PureComponent {
       isMoreFetching,
       isNewSearchRequest,
     } = this.state;
-
     if (isNewSearchRequest) {
       this.loadGifs();
     }
@@ -92,11 +93,10 @@ class SearchResult extends React.PureComponent {
     return (
       <div id="search-result">
         <SearchForm
-          handleClick={this.handleRequest}
+          handleClick={this.redirect}
           inputValue={searchInput}
           setInput={this.setRef}
         />
-        {this.redirect()}
         <GifsComponent
           gifs={gifs}
           isFetching={isFetching}
@@ -117,4 +117,13 @@ class SearchResult extends React.PureComponent {
   }
 }
 
+SearchResult.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+};
+
+SearchResult.defaultProps = {
+  history: {},
+};
 export default SearchResult;

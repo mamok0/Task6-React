@@ -31,7 +31,7 @@ class SearchForm extends React.PureComponent {
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
   handleClick: PropTypes.func,
-  setInput: () => {},
+  setInput: PropTypes.func,
 };
 
 SearchForm.defaultProps = {
