@@ -2,32 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SearchForm from './SearchForm';
-import GifsComponent from './Gifs';
-import MoreGifsComponent from './MoreGifs';
+import Gifs from './Gifs';
 import Button from './DefaultButton';
 import {
   getGifs,
   getMoreGifs,
   getSearchQuery,
-  setRef,
   createSearchLink,
 } from './api';
 import forgeGifElements from './elementForgery';
 
-class SearchResult extends React.PureComponent {
+class SearchResultContainer extends React.Component {
   state = {
     gifsOffset: 0,
     searchInput: getSearchQuery(),
     gifs: null,
     isFetching: true,
-    isMoreFetching: true,
     moreGifs: [],
   };
 
-  setRef = setRef.bind(this);
-
   componentDidMount() {
     this.loadGifs();
+  }
+
+  setRef = (input) => {
+    this.childRef = input;
   }
 
   handleRequest = () => {
@@ -48,7 +47,6 @@ class SearchResult extends React.PureComponent {
       gifs: gifsElements,
       isFetching: false,
       isNewSearchRequest: false,
-      isMoreFetching: true,
       moreGifs: [],
       gifsOffset: 0,
     });
@@ -64,7 +62,6 @@ class SearchResult extends React.PureComponent {
     muchMoreGifs.push(newGifsElements);
     this.setState({
       moreGifs: muchMoreGifs,
-      isMoreFetching: false,
     });
   }
 
@@ -75,9 +72,9 @@ class SearchResult extends React.PureComponent {
       gifs,
       isFetching,
       moreGifs,
-      isMoreFetching,
       isNewSearchRequest,
     } = this.state;
+
     if (isNewSearchRequest) {
       this.loadGifs();
     }
@@ -85,23 +82,18 @@ class SearchResult extends React.PureComponent {
     return (
       <div id="search-result">
         <SearchForm
-          handleClick={this.handleRequest}
+          onClick={this.handleRequest}
           inputValue={searchInput}
           setInput={this.setRef}
         />
-        <GifsComponent
-          gifs={gifs}
+        <Gifs
+          gifs={[gifs, moreGifs]}
           isFetching={isFetching}
           searchInput={searchInput}
         />
-        <MoreGifsComponent
-          gifsOffset={gifsOffset}
-          moreGifs={moreGifs}
-          isMoreFetching={isMoreFetching}
-        />
         <Button
           className="btn btn-success mt-2 mb-4"
-          handleClick={() => this.loadMoreGifs(gifsOffset + 15)}
+          onClick={() => this.loadMoreGifs(gifsOffset + 15)}
           buttonText="More gifs!"
         />
       </div>
@@ -109,13 +101,10 @@ class SearchResult extends React.PureComponent {
   }
 }
 
-SearchResult.propTypes = {
+SearchResultContainer.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
-  }),
+  }).isRequired,
 };
 
-SearchResult.defaultProps = {
-  history: {},
-};
-export default SearchResult;
+export default SearchResultContainer;

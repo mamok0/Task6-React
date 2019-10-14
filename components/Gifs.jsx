@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 
 import Loading from './Loading';
 
-class GifsComponent extends React.PureComponent {
+class Gifs extends React.PureComponent {
   render() {
-    const { isFetching, gifs, searchInput } = this.props;
+    const {
+      isFetching,
+      gifs,
+      searchInput,
+    } = this.props;
     if (isFetching) {
       return <Loading />;
     }
@@ -22,16 +26,14 @@ class GifsComponent extends React.PureComponent {
   }
 }
 
-GifsComponent.propTypes = {
-  isFetching: PropTypes.bool,
-  gifs: PropTypes.arrayOf(PropTypes.object),
-  searchInput: PropTypes.string,
+Gifs.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+  gifs: PropTypes.arrayOf(PropTypes.array),
+  searchInput: PropTypes.string.isRequired,
 };
 
-GifsComponent.defaultProps = {
-  isFetching: true,
-  gifs: {},
-  searchInput: '',
+Gifs.defaultProps = {
+  gifs: [],
 };
 
-export default GifsComponent;
+export default Gifs;

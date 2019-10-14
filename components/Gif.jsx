@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class GifComponent extends React.PureComponent {
+class Gif extends React.PureComponent {
   render() {
     const {
       gifTitle, gifDateTime, gifImg,
@@ -24,17 +24,10 @@ class GifComponent extends React.PureComponent {
   }
 }
 
-GifComponent.propTypes = {
-  gifTitle: PropTypes.string,
-  gifDateTime: PropTypes.string,
-  gifImg: PropTypes.string,
+Gif.propTypes = {
+  gifTitle: PropTypes.string.isRequired,
+  gifDateTime: PropTypes.string.isRequired,
+  gifImg: PropTypes.string.isRequired,
 };
 
-GifComponent.defaultProps = {
-  gifTitle: '',
-  gifDateTime: '',
-  gifImg: '',
-};
-
-
-export default GifComponent;
+export default Gif;

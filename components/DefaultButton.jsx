@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Button extends React.PureComponent {
+class DefaultButton extends React.PureComponent {
   render() {
-    const { handleClick, className, buttonText } = this.props;
+    const { onClick, buttonText } = this.props;
     return (
       <div>
         <button
           type="button"
-          className={`${className}`}
-          onClick={handleClick}
+          className="btn btn-success mt-2 mb-4"
+          onClick={onClick}
         >
           {buttonText}
         </button>
@@ -18,16 +18,13 @@ class Button extends React.PureComponent {
   }
 }
 
-Button.propTypes = {
-  handleClick: PropTypes.func,
-  className: PropTypes.string,
-  buttonText: PropTypes.string,
+DefaultButton.propTypes = {
+  onClick: PropTypes.func,
+  buttonText: PropTypes.string.isRequired,
 };
 
-Button.defaultProps = {
-  handleClick: () => {},
-  className: '',
-  buttonText: '',
+DefaultButton.defaultProps = {
+  onClick: () => {},
 };
 
-export default Button;
+export default DefaultButton;
