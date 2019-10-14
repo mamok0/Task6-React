@@ -37,7 +37,7 @@ class GifPage extends React.PureComponent {
       <div id="gif-container">
         {isFetching ? <Loading /> : (
           <GifComponent
-            gifImg={gif.images.original.mp4 || null}
+            gifImg={gif.images.original.mp4}
             gifTitle={gif.title}
             gifDateTime={gif.import_datetime}
             isFetching={isFetching}
