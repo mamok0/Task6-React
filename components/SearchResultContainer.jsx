@@ -93,7 +93,7 @@ class SearchResultContainer extends React.Component {
           className="btn btn-success mt-2 mb-4"
           onClick={() => this.loadMoreGifs(gifsOffset + 15)}
         >
-          More gifs!
+          {' More gifs!'}
         </Button>
       </div>
     );
