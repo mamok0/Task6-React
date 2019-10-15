@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import DefaultButton from './DefaultButton';
 
 class SearchForm extends React.PureComponent {
   render() {
-    const { inputValue, onRequest } = this.props;
+    const { inputValue, onClick, onChange } = this.props;
 
     return (
       <div id="search-form" className="container text-center mt-3">
@@ -11,21 +14,18 @@ class SearchForm extends React.PureComponent {
         <input
           id="search-input"
           type="text"
+          onChange={(e) => onChange(e)}
           className="form-control"
           defaultValue={
             inputValue
           }
         />
-        <input
-          type="button"
-          className="btn btn-danger mt-2"
-          onClick={() => {
-            if (onRequest) {
-              onRequest();
-            }
-          }}
-          value="Search"
-        />
+        <Link to={`/search?q=${inputValue}`}>
+          <DefaultButton
+            onClick={onClick}
+            buttonText="Search"
+          />
+        </Link>
       </div>
     );
   }
@@ -33,12 +33,14 @@ class SearchForm extends React.PureComponent {
 
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
-  onRequest: PropTypes.func,
+  onClick: PropTypes.func,
+  setInput: PropTypes.func,
 };
 
 SearchForm.defaultProps = {
   inputValue: '',
-  onRequest: () => {},
+  onClick: () => {},
+  setInput: () => {},
 };
 
 export default SearchForm;

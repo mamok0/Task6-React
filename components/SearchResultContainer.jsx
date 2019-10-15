@@ -1,34 +1,40 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import SearchForm from './SearchForm';
-import GifsComponent from './Gifs';
-import MoreGifsComponent from './MoreGifs';
-import { getGifs, getMoreGifs, getSearchQuery } from './api';
+import Gifs from './Gifs';
+import Button from './DefaultButton';
+import {
+  getGifs,
+  getMoreGifs,
+  getSearchQuery,
+  createSearchLink,
+} from './api';
 import forgeGifElements from './elementForgery';
 
-class SearchResult extends React.PureComponent {
+class SearchResultContainer extends React.Component {
   state = {
     gifsOffset: 0,
     searchInput: getSearchQuery(),
     gifs: null,
     isFetching: true,
-    isMoreFetching: true,
     moreGifs: [],
-    redirect: null,
-    newSearchRequest: false,
   };
 
   componentDidMount() {
     this.loadGifs();
   }
 
+  setRef = (input) => {
+    this.childRef = input;
+  }
+
   handleRequest = () => {
-    const newSearchTerm = document.getElementById('search-input').value;
+    const { history } = this.props;
+    history.push(createSearchLink(this.childRef.value));
     this.setState({
-      searchInput: newSearchTerm,
-      redirect: <Redirect to={`/search?q=${newSearchTerm}`} />,
-      newSearchRequest: true,
+      searchInput: this.childRef.value,
+      isNewSearchRequest: true,
     });
   }
 
@@ -40,8 +46,7 @@ class SearchResult extends React.PureComponent {
     this.setState({
       gifs: gifsElements,
       isFetching: false,
-      newSearchRequest: false,
-      isMoreFetching: true,
+      isNewSearchRequest: false,
       moreGifs: [],
       gifsOffset: 0,
     });
@@ -57,7 +62,6 @@ class SearchResult extends React.PureComponent {
     muchMoreGifs.push(newGifsElements);
     this.setState({
       moreGifs: muchMoreGifs,
-      isMoreFetching: false,
     });
   }
 
@@ -68,34 +72,39 @@ class SearchResult extends React.PureComponent {
       gifs,
       isFetching,
       moreGifs,
-      isMoreFetching,
-      redirect,
-      newSearchRequest,
+      isNewSearchRequest,
     } = this.state;
 
-    if (newSearchRequest) {
+    if (isNewSearchRequest) {
       this.loadGifs();
     }
 
     return (
       <div id="search-result">
         <SearchForm
-          onRequest={this.handleRequest}
+          onClick={this.handleRequest}
           inputValue={searchInput}
+          setInput={this.setRef}
         />
-        {redirect}
-        <GifsComponent gifsData={{ gifs, isFetching, searchInput }} />
-        <MoreGifsComponent moreGifsData={{ gifsOffset, moreGifs, isMoreFetching }} />
-        <input
-          type="button"
+        <Gifs
+          gifs={[gifs, moreGifs]}
+          isFetching={isFetching}
+          searchInput={searchInput}
+        />
+        <Button
           className="btn btn-success mt-2 mb-4"
-          value="More gifs!"
           onClick={() => this.loadMoreGifs(gifsOffset + 15)}
-          key="more-button"
+          buttonText="More gifs!"
         />
       </div>
     );
   }
 }
 
-export default SearchResult;
+SearchResultContainer.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+export default SearchResultContainer;

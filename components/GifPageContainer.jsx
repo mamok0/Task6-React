@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Loading from './Loading';
 
-import GifComponent from './GifComponent';
+import Gif from './Gif';
 import BackButton from './BackButton';
 import { getGif } from './api';
 
-class GifPage extends React.PureComponent {
+class GifPageContainer extends React.Component {
   state = {
     gif: {},
     isFetching: true,
-    redirect: null,
   };
 
   async componentDidMount() {
@@ -31,28 +31,39 @@ class GifPage extends React.PureComponent {
   }
 
   render() {
-    const { gif, isFetching, redirect } = this.state;
+    const { gif, isFetching } = this.state;
 
     return (
       <div id="gif-container">
-        <GifComponent gifData={{ gif, isFetching }} />
+        {isFetching ? <Loading /> : (
+          <Gif
+            gifImg={gif.images.original.mp4}
+            gifTitle={gif.title}
+            gifDateTime={gif.import_datetime}
+            isFetching={isFetching}
+          />
+        )}
         <BackButton onRedirect={this.handleRedirect} />
-        {redirect}
       </div>
     );
   }
 }
 
-GifPage.propTypes = {
-  match: PropTypes.object,
-  location: PropTypes.object,
-  history: PropTypes.object,
+GifPageContainer.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+    go: PropTypes.func,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  location: PropTypes.shape({
+    state: PropTypes.shape({
+      isValidUrl: PropTypes.bool,
+    }),
+  }).isRequired,
 };
 
-GifPage.defaultProps = {
-  match: {},
-  location: {},
-  history: {},
-};
-
-export default GifPage;
+export default GifPageContainer;
