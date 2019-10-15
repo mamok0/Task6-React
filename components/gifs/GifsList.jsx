@@ -10,11 +10,9 @@ class GifsList extends React.PureComponent {
       gifs,
       searchInput,
     } = this.props;
-
     if (isFetching) {
       return <Loading />;
     }
-
     return (
       <div id="search-output">
         <h4 key="search-label">
@@ -30,7 +28,12 @@ class GifsList extends React.PureComponent {
 
 GifsList.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  gifs: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)),
+  gifs: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array,
+    ]),
+  ),
   searchInput: PropTypes.string.isRequired,
 };
 

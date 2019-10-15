@@ -22,18 +22,15 @@ class SearchResultContainer extends React.Component {
 
   componentDidMount() {
     this.loadGifs();
-    window.onpopstate = () => {
-      this.setState({
-        searchInput: getSearchQuery(),
-        searchValue: getSearchQuery(),
-      });
-      this.loadGifs();
-    };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchValue } = this.state;
-    if (prevState.searchValue !== searchValue) {
+    if (prevState.searchValue !== getSearchQuery()) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        searchValue: getSearchQuery(),
+        searchInput: getSearchQuery(),
+      });
       this.loadGifs();
     }
   }
@@ -42,18 +39,6 @@ class SearchResultContainer extends React.Component {
     this.setState({
       searchInput: event.target.value,
     });
-  }
-
-  onSearch = () => {
-    const { searchInput } = this.state;
-    this.setState({
-      searchValue: searchInput,
-    });
-    this.loadGifs();
-  }
-
-  componentWillUnmount = () => {
-    window.onpopstate = () => {};
   }
 
   async loadGifs(term) {
