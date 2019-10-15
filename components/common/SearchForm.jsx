@@ -22,10 +22,9 @@ class SearchForm extends React.PureComponent {
         <Link
           to={`/search?q=${inputValue}`}
         >
-          <DefaultButton
-            buttonText="Search"
-            onClick={onSearch}
-          />
+          <DefaultButton onClick={onSearch}>
+            {'Search'}
+          </DefaultButton>
         </Link>
       </div>
     );

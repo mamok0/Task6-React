@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 class DefaultButton extends React.PureComponent {
   render() {
-    const { onClick, buttonText } = this.props;
+    const { onClick, children } = this.props;
+
     return (
       <>
         <button
@@ -11,7 +12,7 @@ class DefaultButton extends React.PureComponent {
           className="btn btn-success m-2"
           onClick={onClick}
         >
-          {buttonText}
+          {children}
         </button>
       </>
     );
@@ -20,7 +21,7 @@ class DefaultButton extends React.PureComponent {
 
 DefaultButton.propTypes = {
   onClick: PropTypes.func,
-  buttonText: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
 };
 
 DefaultButton.defaultProps = {
