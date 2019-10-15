@@ -26,7 +26,6 @@ function forgeGifElements(gifs) {
     );
     return gifLink;
   });
-
   return gifsList;
 }
 

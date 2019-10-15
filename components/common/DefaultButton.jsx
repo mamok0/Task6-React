@@ -5,15 +5,15 @@ class DefaultButton extends React.PureComponent {
   render() {
     const { onClick, buttonText } = this.props;
     return (
-      <div>
+      <>
         <button
           type="button"
-          className="btn btn-success mt-2 mb-4"
+          className="btn btn-success m-2"
           onClick={onClick}
         >
           {buttonText}
         </button>
-      </div>
+      </>
     );
   }
 }

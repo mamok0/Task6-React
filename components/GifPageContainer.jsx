@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from './Loading';
+import Loading from './common/Loading';
 
-import Gif from './Gif';
-import BackButton from './BackButton';
-import { getGif } from './api';
+import Gif from './gifs/Gif';
+import BackButton from './common/BackButton';
+import { getGif } from './services/api';
 
 class GifPageContainer extends React.Component {
   state = {
