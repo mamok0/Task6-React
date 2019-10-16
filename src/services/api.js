@@ -1,3 +1,5 @@
+import GifModel from './gifModel';
+
 export function getQuery(queryParams) {
   let url = '?api_key=Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2&';
 
@@ -20,8 +22,13 @@ async function getApiResponse(params) {
     rating: params.rating || 'G',
     lang: params.lang || 'en',
   };
-  const response = await fetch(`https://api.giphy.com/v1/gifs/search${getQuery(queryParams)}`);
-  const gifsList = response.json();
+
+  let gifsList = [];
+  await fetch(`https://api.giphy.com/v1/gifs/search${getQuery(queryParams)}`)
+    .then((response) => response.json())
+    .then((gifs) => {
+      gifsList = gifs.data.map((gif) => new GifModel(gif));
+    });
   return gifsList;
 }
 
