@@ -41,8 +41,12 @@ export async function getMoreGifs(offset) {
 }
 
 export async function getGif(id) {
-  const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({})}`);
-  const gif = response.json();
+  let gif;
+  await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({})}`)
+    .then((response) => response.json())
+    .then((gifData) => {
+      gif = new GifModel(gifData.data);
+    });
   return gif;
 }
 

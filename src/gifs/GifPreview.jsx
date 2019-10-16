@@ -11,7 +11,7 @@ class GifPreview extends React.PureComponent {
         to={
             {
               pathname: `/gif/${gif.id}`,
-              state: { isValidUrl: true },
+              isFirstLoadedPage: true,
             }
         }
       >

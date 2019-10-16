@@ -11,7 +11,7 @@ import {
 } from '../services/api';
 
 
-class SearchResult extends React.Component {
+class SearchResultPage extends React.Component {
   state = {
     gifsOffset: 0,
     searchValue: getSearchQuery(),
@@ -29,6 +29,7 @@ class SearchResult extends React.Component {
     if (prevState.searchValue !== searchTerm) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
+        gifs: [],
         searchValue: searchTerm,
         searchInput: searchTerm,
       });
@@ -76,7 +77,6 @@ class SearchResult extends React.Component {
         <SearchForm
           onChange={this.handleChange}
           inputValue={searchInput}
-          onSearch={this.onSearch}
         />
         <GifsList
           gifs={gifs}
@@ -93,10 +93,10 @@ class SearchResult extends React.Component {
   }
 }
 
-SearchResult.propTypes = {
+SearchResultPage.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
 
-export default SearchResult;
+export default SearchResultPage;
