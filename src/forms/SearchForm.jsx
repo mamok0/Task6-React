@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import DefaultButton from './DefaultButton';
+import DefaultButton from '../common/DefaultButton';
 import { getSearchQuery } from '../services/api';
 
 class SearchForm extends React.PureComponent {
@@ -23,7 +23,7 @@ class SearchForm extends React.PureComponent {
           to={`/search?q=${inputValue}`}
         >
           <DefaultButton onClick={onSearch}>
-            {'Search'}
+            Search
           </DefaultButton>
         </Link>
       </div>

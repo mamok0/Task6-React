@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SearchForm from './common/SearchForm';
+import SearchForm from '../forms/SearchForm';
 
-class HomeContainer extends React.Component {
+class Home extends React.Component {
   state = {
     searchInput: '',
   }
 
-  onChange = (event) => {
+  handleChange = (event) => {
     this.setState(
       { searchInput: event.target.value },
     );
@@ -19,16 +19,16 @@ class HomeContainer extends React.Component {
     return (
       <SearchForm
         inputValue={searchInput}
-        onChange={this.onChange}
+        onChange={this.handleChange}
       />
     );
   }
 }
 
-HomeContainer.propTypes = {
+Home.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
 
-export default HomeContainer;
+export default Home;
