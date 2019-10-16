@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Loading from './Loading';
+import Loading from '../common/Loading';
 
-class Gifs extends React.PureComponent {
+class GifsList extends React.PureComponent {
   render() {
     const {
       isFetching,
@@ -15,7 +15,7 @@ class Gifs extends React.PureComponent {
     }
     return (
       <div id="search-output">
-        <h4 className="mt-3" key="search-label">
+        <h4 key="search-label">
           Search results for `
           {searchInput}
           `:
@@ -26,14 +26,19 @@ class Gifs extends React.PureComponent {
   }
 }
 
-Gifs.propTypes = {
+GifsList.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  gifs: PropTypes.arrayOf(PropTypes.array),
+  gifs: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array,
+    ]),
+  ),
   searchInput: PropTypes.string.isRequired,
 };
 
-Gifs.defaultProps = {
+GifsList.defaultProps = {
   gifs: [],
 };
 
-export default Gifs;
+export default GifsList;

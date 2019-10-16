@@ -1,101 +1,100 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SearchForm from './SearchForm';
-import Gifs from './Gifs';
-import Button from './DefaultButton';
+import SearchForm from './common/SearchForm';
+import GifsList from './gifs/GifsList';
+import Button from './common/DefaultButton';
 import {
   getGifs,
   getMoreGifs,
   getSearchQuery,
-  createSearchLink,
-} from './api';
-import forgeGifElements from './elementForgery';
+} from './services/api';
+import forgeGifElements from './services/elementForgery';
 
 class SearchResultContainer extends React.Component {
   state = {
     gifsOffset: 0,
+    searchValue: getSearchQuery(),
     searchInput: getSearchQuery(),
     gifs: null,
     isFetching: true,
-    moreGifs: [],
   };
 
   componentDidMount() {
     this.loadGifs();
   }
 
-  setRef = (input) => {
-    this.childRef = input;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchValue !== getSearchQuery()) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        searchValue: getSearchQuery(),
+        searchInput: getSearchQuery(),
+      });
+      this.loadGifs();
+    }
   }
 
-  handleRequest = () => {
-    const { history } = this.props;
-    history.push(createSearchLink(this.childRef.value));
+  onChange = (event) => {
     this.setState({
-      searchInput: this.childRef.value,
-      isNewSearchRequest: true,
+      searchInput: event.target.value,
     });
   }
 
-  async loadGifs() {
+  async loadGifs(term) {
     const { searchInput } = this.state;
-
-    const response = await getGifs(searchInput);
+    const response = await getGifs(term || searchInput);
     const gifsElements = forgeGifElements(response.data);
     this.setState({
       gifs: gifsElements,
       isFetching: false,
-      isNewSearchRequest: false,
-      moreGifs: [],
       gifsOffset: 0,
     });
   }
 
   async loadMoreGifs(offset) {
-    const { moreGifs } = this.state;
-    const muchMoreGifs = [moreGifs];
+    const { gifs } = this.state;
+    const muchMoreGifs = [gifs];
 
     this.setState({ gifsOffset: offset });
+
     const response = await getMoreGifs(offset);
     const newGifsElements = forgeGifElements(response.data);
+
     muchMoreGifs.push(newGifsElements);
+
     this.setState({
-      moreGifs: muchMoreGifs,
+      gifs: muchMoreGifs,
     });
   }
 
   render() {
     const {
-      searchInput,
+      searchValue,
       gifsOffset,
       gifs,
       isFetching,
-      moreGifs,
-      isNewSearchRequest,
+      searchInput,
     } = this.state;
-
-    if (isNewSearchRequest) {
-      this.loadGifs();
-    }
 
     return (
       <div id="search-result">
         <SearchForm
-          onClick={this.handleRequest}
+          onChange={this.onChange}
           inputValue={searchInput}
-          setInput={this.setRef}
+          onSearch={this.onSearch}
         />
-        <Gifs
-          gifs={[gifs, moreGifs]}
+        <GifsList
+          gifs={gifs}
           isFetching={isFetching}
-          searchInput={searchInput}
+          searchInput={searchValue}
         />
         <Button
           className="btn btn-success mt-2 mb-4"
           onClick={() => this.loadMoreGifs(gifsOffset + 15)}
-          buttonText="More gifs!"
-        />
+        >
+          {' More gifs!'}
+        </Button>
       </div>
     );
   }

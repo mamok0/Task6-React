@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import DefaultButton from './DefaultButton';
+import { getSearchQuery } from '../services/api';
 
 class SearchForm extends React.PureComponent {
   render() {
-    const { inputValue, onClick, onChange } = this.props;
+    const { inputValue, onChange, onSearch } = this.props;
 
     return (
       <div id="search-form" className="container text-center mt-3">
@@ -14,17 +15,16 @@ class SearchForm extends React.PureComponent {
         <input
           id="search-input"
           type="text"
-          onChange={(e) => onChange(e)}
+          onChange={onChange}
           className="form-control"
-          defaultValue={
-            inputValue
-          }
+          value={inputValue}
         />
-        <Link to={`/search?q=${inputValue}`}>
-          <DefaultButton
-            onClick={onClick}
-            buttonText="Search"
-          />
+        <Link
+          to={`/search?q=${inputValue}`}
+        >
+          <DefaultButton onClick={onSearch}>
+            {'Search'}
+          </DefaultButton>
         </Link>
       </div>
     );
@@ -33,14 +33,14 @@ class SearchForm extends React.PureComponent {
 
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
-  onClick: PropTypes.func,
-  setInput: PropTypes.func,
+  onChange: PropTypes.func,
+  onSearch: PropTypes.func,
 };
 
 SearchForm.defaultProps = {
-  inputValue: '',
-  onClick: () => {},
-  setInput: () => {},
+  inputValue: getSearchQuery(),
+  onChange: () => {},
+  onSearch: () => {},
 };
 
 export default SearchForm;

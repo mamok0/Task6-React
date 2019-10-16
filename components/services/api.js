@@ -14,7 +14,7 @@ export function getSearchQuery() {
 
 async function getApiResponse(params) {
   const queryParams = {
-    q: encodeURI(getSearchQuery() || ''),
+    q: encodeURI(params.q || getSearchQuery()),
     limit: params.limit || '15',
     offset: params.offset || '0',
     rating: params.rating || 'G',
@@ -25,8 +25,8 @@ async function getApiResponse(params) {
   return gifsList;
 }
 
-export async function getGifs() {
-  return getApiResponse({});
+export async function getGifs(q) {
+  return getApiResponse({ q });
 }
 
 export async function getMoreGifs(offset) {
