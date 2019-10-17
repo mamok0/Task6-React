@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 class DefaultButton extends React.PureComponent {
   render() {
-    const { onClick, children } = this.props;
+    const { onClick, children, isFetching } = this.props;
 
-    return (
+
+    return isFetching && children === 'More gifs!' ? null : (
       <>
         <button
           type="button"
@@ -22,10 +23,12 @@ class DefaultButton extends React.PureComponent {
 DefaultButton.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool,
 };
 
 DefaultButton.defaultProps = {
   onClick: () => {},
+  isFetching: true,
 };
 
 export default DefaultButton;
