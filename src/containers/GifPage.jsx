@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { gifInfoLoaded } from '../js/actions/index';
 
+import { gifInfoLoaded } from '../actions';
 import Gif from '../gifs/Gif';
-import Loading from '../common/Loading';
-import BackButton from '../common/BackButton';
-import { getGif } from '../js/services/api';
+import Loading from '../components/common/Loading';
+import BackButton from '../components/common/BackButton';
+import { getGif } from '../services/api';
 
 class GifPage extends React.Component {
   async componentDidMount() {
@@ -17,15 +17,6 @@ class GifPage extends React.Component {
     dispatchGifInfoLoaded({
       gif,
       isGifFetching: false,
-    });
-  }
-
-  componentWillUnmount() {
-    const { dispatchGifInfoLoaded } = this.props;
-
-    dispatchGifInfoLoaded({
-      gif: {},
-      isGifFetching: true,
     });
   }
 

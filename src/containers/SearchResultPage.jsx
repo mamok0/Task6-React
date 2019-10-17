@@ -2,63 +2,51 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  gifsLoaded,
-  inputChange,
-  nextSearchRequest,
-  moreGifsLoaded,
-} from '../js/actions/index';
 
-import SearchForm from '../forms/SearchForm';
+import { gifsLoaded, searchRequest } from '../actions';
+import SearchForm from '../components/forms/SearchForm';
 import GifsList from '../gifs/GifsList';
-import DefaultButton from '../common/DefaultButton';
+import DefaultButton from '../components/common/DefaultButton';
 import {
   getGifs,
   getMoreGifs,
   getSearchQuery,
-} from '../js/services/api';
+} from '../services/api';
 
 
 class SearchResultPage extends React.Component {
   componentDidMount() {
-    this.loadGifs();
-  }
+    const { gifs } = this.props;
 
-  componentDidUpdate() {
-    const { searchValue, dispatchNextSearchRequest } = this.props;
-    const searchTerm = getSearchQuery();
-    if (searchValue !== searchTerm) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      dispatchNextSearchRequest({
-        gifs: [],
-        searchValue: searchTerm,
-        searchInput: searchTerm,
-      });
+    if (gifs.length === 0) {
       this.loadGifs();
     }
   }
 
-  componentWillUnmount() {
-    const { dispatchGifsLoaded } = this.props;
+  async componentDidUpdate() {
+    const { gifs, searchValue, dispatchSearchRequest } = this.props;
+    const searchTerm = getSearchQuery();
 
-    dispatchGifsLoaded({
-      newGifs: [],
-      isGifListFetching: true,
-      gifListOffset: 0,
-    });
-  }
+    if (gifs.length === 0) {
+      this.loadGifs();
+    }
 
-  handleChange = (event) => {
-    const { dispatchInputChange } = this.props;
-    dispatchInputChange(event.target.value);
+    if (searchValue !== searchTerm) {
+      const response = await getGifs();
+      dispatchSearchRequest({
+        searchValue: searchTerm,
+        gifs: response,
+      });
+    }
   }
 
   handleMoreGifsClick = async () => {
-    const { dispatchMoreGifsLoaded, gifListOffset } = this.props;
+    const { gifListOffset, dispatchGifsLoaded } = this.props;
     const response = await getMoreGifs(gifListOffset + 15);
 
-    dispatchMoreGifsLoaded({
-      moreGifs: response,
+    dispatchGifsLoaded({
+      newGifs: response,
+      isGifListFetching: false,
       gifListOffset: gifListOffset + 15,
     });
   }
@@ -66,7 +54,6 @@ class SearchResultPage extends React.Component {
   async loadGifs() {
     const { dispatchGifsLoaded } = this.props;
     const response = await getGifs();
-
     dispatchGifsLoaded({
       newGifs: response,
       isGifListFetching: false,
@@ -79,15 +66,10 @@ class SearchResultPage extends React.Component {
       searchValue,
       gifs,
       isGifListFetching,
-      searchInput,
     } = this.props;
     return (
       <div id="search-result">
-        <SearchForm
-          onChange={this.handleChange}
-          inputValue={searchInput}
-          onClick={this.handleSearchClick}
-        />
+        <SearchForm />
         <GifsList
           gifs={gifs}
           isFetching={isGifListFetching}
@@ -119,20 +101,15 @@ SearchResultPage.propTypes = {
     }),
   ).isRequired,
   isGifListFetching: PropTypes.bool.isRequired,
-  searchInput: PropTypes.string.isRequired,
   gifListOffset: PropTypes.number.isRequired,
-  dispatchMoreGifsLoaded: PropTypes.func.isRequired,
   dispatchGifsLoaded: PropTypes.func.isRequired,
-  dispatchInputChange: PropTypes.func.isRequired,
-  dispatchNextSearchRequest: PropTypes.func.isRequired,
+  dispatchSearchRequest: PropTypes.func.isRequired,
 };
 
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchGifsLoaded: bindActionCreators(gifsLoaded, dispatch),
-  dispatchInputChange: bindActionCreators(inputChange, dispatch),
-  dispatchNextSearchRequest: bindActionCreators(nextSearchRequest, dispatch),
-  dispatchMoreGifsLoaded: bindActionCreators(moreGifsLoaded, dispatch),
+  dispatchSearchRequest: bindActionCreators(searchRequest, dispatch),
 });
 
 const mapStateToProps = (state) => ({

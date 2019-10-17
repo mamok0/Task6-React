@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import GifPreview from './GifPreview';
-import Loading from '../common/Loading';
+import Loading from '../components/common/Loading';
 
 class GifsList extends React.PureComponent {
   render() {
