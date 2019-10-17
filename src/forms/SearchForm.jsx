@@ -7,7 +7,7 @@ import { getSearchQuery } from '../services/api';
 
 class SearchForm extends React.PureComponent {
   render() {
-    const { inputValue, onChange, onSearch } = this.props;
+    const { inputValue, onChange } = this.props;
 
     return (
       <div id="search-form" className="container text-center mt-3">
@@ -22,7 +22,7 @@ class SearchForm extends React.PureComponent {
         <Link
           to={`/search?q=${inputValue}`}
         >
-          <DefaultButton onClick={onSearch}>
+          <DefaultButton>
             Search
           </DefaultButton>
         </Link>
@@ -34,13 +34,11 @@ class SearchForm extends React.PureComponent {
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
   onChange: PropTypes.func,
-  onSearch: PropTypes.func,
 };
 
 SearchForm.defaultProps = {
   inputValue: getSearchQuery(),
   onChange: () => {},
-  onSearch: () => {},
 };
 
 export default SearchForm;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import SearchForm from '../forms/SearchForm';
 
-class Home extends React.Component {
+class HomePage extends React.Component {
   state = {
     searchInput: '',
   }
@@ -25,10 +25,10 @@ class Home extends React.Component {
   }
 }
 
-Home.propTypes = {
+HomePage.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
 
-export default Home;
+export default HomePage;

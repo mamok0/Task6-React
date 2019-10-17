@@ -5,7 +5,6 @@ import Loading from '../common/Loading';
 import Gif from '../gifs/Gif';
 import BackButton from '../common/BackButton';
 import { getGif } from '../services/api';
-import GifModel from '../services/gifModel';
 
 class GifPage extends React.Component {
   state = {
@@ -15,9 +14,10 @@ class GifPage extends React.Component {
 
   async componentDidMount() {
     const { match } = this.props;
-    const gifData = await getGif(match.params.id);
+    const gif = await getGif(match.params.id);
+
     this.setState({
-      gif: GifModel.create(gifData.data),
+      gif,
       isFetching: false,
     });
   }
@@ -25,7 +25,7 @@ class GifPage extends React.Component {
   handleRedirect = () => {
     const { location, history } = this.props;
 
-    if (location.state && location.state.isValidUrl) {
+    if (location.isFirstLoadedPage) {
       history.go(-1);
     }
     history.push('/');
@@ -58,9 +58,7 @@ GifPage.propTypes = {
     }),
   }).isRequired,
   location: PropTypes.shape({
-    state: PropTypes.shape({
-      isValidUrl: PropTypes.bool,
-    }),
+    isFirstLoadedPage: PropTypes.bool,
   }).isRequired,
 };
 

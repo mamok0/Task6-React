@@ -16,7 +16,7 @@ class GifsList extends React.PureComponent {
       return <Loading />;
     }
 
-    const gifElements = gifs.map((gif) => <GifPreview key={`${gif.id}`} gif={gif} />);
+    const gifElements = gifs.map((gif) => <GifPreview key={gif.id} gif={gif} />);
 
     return (
       <div id="search-output">

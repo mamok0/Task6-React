@@ -23,13 +23,10 @@ async function getApiResponse(params) {
     lang: params.lang || 'en',
   };
 
-  let gifsList = [];
-  await fetch(`https://api.giphy.com/v1/gifs/search${getQuery(queryParams)}`)
-    .then((response) => response.json())
-    .then((gifs) => {
-      gifsList = gifs.data.map((gif) => new GifModel(gif));
-    });
-  return gifsList;
+  const response = await fetch(`https://api.giphy.com/v1/gifs/search${getQuery(queryParams)}`);
+  const gifs = await response.json();
+  const modelGifsData = gifs.data.map((gif) => new GifModel(gif));
+  return modelGifsData;
 }
 
 export async function getGifs(q) {
@@ -42,8 +39,8 @@ export async function getMoreGifs(offset) {
 
 export async function getGif(id) {
   const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({})}`);
-  const gif = response.json();
-  return gif;
+  const gifData = await response.json();
+  return new GifModel(gifData.data);
 }
 
 export function createSearchLink(searchTerm) {
