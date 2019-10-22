@@ -1,23 +1,18 @@
-import {
-  GIFS_LOADED,
-  SEARCH_REQUEST,
-  GIF_INFO_LOADED,
-} from './action-types';
+import { createActions } from 'redux-actions';
 
-export function gifsLoaded(payload) {
-  return { type: GIFS_LOADED, payload };
-}
+const actions = createActions({
+  SEARCH_REQUEST: ({ searchValue }) => ({ searchValue }),
+  GIFS_LOADED: ({ newGifs, isGifListFetching, gifListOffset }) => ({
+    newGifs,
+    isGifListFetching,
+    gifListOffset,
+  }),
+  GIFS_UNLOADED: () => ({
+    newGifs: [],
+    isGifListFetching: true,
+    gifListOffset: 0,
+  }),
+  GIF_INFO_LOADED: ({ gif, isGifFetching }) => ({ gif, isGifFetching }),
+});
 
-export function searchRequest(payload) {
-  return { type: SEARCH_REQUEST, payload };
-}
-
-export function gifInfoLoaded(payload) {
-  return { type: GIF_INFO_LOADED, payload };
-}
-
-export default {
-  gifsLoaded,
-  searchRequest,
-  gifInfoLoaded,
-};
+export default actions;

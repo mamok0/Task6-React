@@ -1,14 +1,13 @@
 import React from 'react';
 
-import SearchForm from '../components/forms/SearchForm';
+import Search from '../components/forms/SearchForm';
 
 class HomePage extends React.PureComponent {
   render() {
     return (
-      <SearchForm />
+      <Search />
     );
   }
 }
-
 
 export default HomePage;

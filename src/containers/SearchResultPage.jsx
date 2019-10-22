@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-import { gifsLoaded, searchRequest } from '../actions';
+import actions from '../actions';
 import SearchForm from '../components/forms/SearchForm';
 import GifsList from '../gifs/GifsList';
 import DefaultButton from '../components/common/DefaultButton';
@@ -13,38 +12,29 @@ import {
   getSearchQuery,
 } from '../services/api';
 
-
 class SearchResultPage extends React.Component {
   componentDidMount() {
-    const { gifs } = this.props;
-
-    if (gifs.length === 0) {
-      this.loadGifs();
-    }
+    this.loadGifs();
   }
 
   async componentDidUpdate() {
-    const { gifs, searchValue, dispatchSearchRequest } = this.props;
+    const { searchValue, searchRequest, gifsUnloaded } = this.props;
     const searchTerm = getSearchQuery();
 
-    if (gifs.length === 0) {
-      this.loadGifs();
-    }
-
     if (searchValue !== searchTerm) {
-      const response = await getGifs();
-      dispatchSearchRequest({
+      gifsUnloaded();
+      searchRequest({
         searchValue: searchTerm,
-        gifs: response,
       });
     }
+    this.loadGifs();
   }
 
   handleMoreGifsClick = async () => {
-    const { gifListOffset, dispatchGifsLoaded } = this.props;
+    const { gifListOffset, gifsLoaded } = this.props;
     const response = await getMoreGifs(gifListOffset + 15);
 
-    dispatchGifsLoaded({
+    gifsLoaded({
       newGifs: response,
       isGifListFetching: false,
       gifListOffset: gifListOffset + 15,
@@ -52,13 +42,16 @@ class SearchResultPage extends React.Component {
   }
 
   async loadGifs() {
-    const { dispatchGifsLoaded } = this.props;
-    const response = await getGifs();
-    dispatchGifsLoaded({
-      newGifs: response,
-      isGifListFetching: false,
-      gifListOffset: 0,
-    });
+    const { gifsLoaded, gifs } = this.props;
+
+    if (gifs.length === 0) {
+      const response = await getGifs();
+      gifsLoaded({
+        newGifs: response,
+        isGifListFetching: false,
+        gifListOffset: 0,
+      });
+    }
   }
 
   render() {
@@ -67,9 +60,10 @@ class SearchResultPage extends React.Component {
       gifs,
       isGifListFetching,
     } = this.props;
+
     return (
       <div id="search-result">
-        <SearchForm />
+        <SearchForm searchValue={searchValue} />
         <GifsList
           gifs={gifs}
           isFetching={isGifListFetching}
@@ -102,22 +96,23 @@ SearchResultPage.propTypes = {
   ).isRequired,
   isGifListFetching: PropTypes.bool.isRequired,
   gifListOffset: PropTypes.number.isRequired,
-  dispatchGifsLoaded: PropTypes.func.isRequired,
-  dispatchSearchRequest: PropTypes.func.isRequired,
+  gifsLoaded: PropTypes.func.isRequired,
+  searchRequest: PropTypes.func.isRequired,
+  gifsUnloaded: PropTypes.func.isRequired,
 };
 
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGifsLoaded: bindActionCreators(gifsLoaded, dispatch),
-  dispatchSearchRequest: bindActionCreators(searchRequest, dispatch),
+  gifsLoaded: (newData) => dispatch(actions.gifsLoaded(newData)),
+  searchRequest: (newSearchRequest) => dispatch(actions.searchRequest(newSearchRequest)),
+  gifsUnloaded: () => dispatch(actions.gifsUnloaded()),
 });
 
 const mapStateToProps = (state) => ({
-  gifs: state.gifs,
-  isGifListFetching: state.isGifListFetching,
-  gifListOffset: state.gifListOffset,
-  searchInput: state.searchInput,
-  searchValue: state.searchValue,
+  gifs: state.gifs.gifs,
+  isGifListFetching: state.gifs.isGifListFetching,
+  gifListOffset: state.gifs.gifListOffset,
+  searchValue: state.search.searchValue,
 });
 
 const SearchResult = connect(

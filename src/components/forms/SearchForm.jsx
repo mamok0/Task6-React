@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-import { searchRequest } from '../../actions';
+import actions from '../../actions';
 import { getSearchQuery } from '../../services/api';
 import DefaultButton from '../common/DefaultButton';
 
@@ -18,12 +17,11 @@ class SearchForm extends React.PureComponent {
   }
 
   handleClick = () => {
-    const { dispatchSearchRequest } = this.props;
+    const { searchRequest, gifsUnloaded } = this.props;
     const { searchInput } = this.state;
-    dispatchSearchRequest({
-      searchValue: searchInput,
-      gifs: [],
-    });
+
+    searchRequest({ searchValue: searchInput });
+    gifsUnloaded();
   }
 
   render() {
@@ -54,20 +52,18 @@ class SearchForm extends React.PureComponent {
 }
 
 SearchForm.propTypes = {
-  dispatchSearchRequest: PropTypes.func.isRequired,
-};
-
-SearchForm.defaultProps = {
+  searchRequest: PropTypes.func.isRequired,
+  gifsUnloaded: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchSearchRequest: bindActionCreators(searchRequest, dispatch),
+  searchRequest: (newSearch) => dispatch(actions.searchRequest(newSearch)),
+  gifsUnloaded: () => dispatch(actions.gifsUnloaded()),
 });
 
-const mapStateToProps = (state) => ({ searchInput: state.searchInput });
 
 const Search = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(SearchForm);
 

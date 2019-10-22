@@ -32,7 +32,7 @@ class GifsList extends React.PureComponent {
 }
 
 GifsList.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
+  isFetching: PropTypes.bool,
   gifs: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -47,6 +47,7 @@ GifsList.propTypes = {
 
 GifsList.defaultProps = {
   gifs: [],
+  isFetching: true,
 };
 
 export default GifsList;

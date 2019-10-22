@@ -1,9 +1,0 @@
-export const GIFS_LOADED = 'GIFS_LOADED';
-export const SEARCH_REQUEST = 'SEARCH_REQUEST';
-export const GIF_INFO_LOADED = 'GIF_INFO_LOADED';
-
-export default {
-  GIFS_LOADED,
-  SEARCH_REQUEST,
-  GIF_INFO_LOADED,
-};
