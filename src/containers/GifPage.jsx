@@ -1,24 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../common/Loading';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { gifInfoLoaded } from '../js/actions/index';
 
 import Gif from '../gifs/Gif';
+import Loading from '../common/Loading';
 import BackButton from '../common/BackButton';
-import { getGif } from '../services/api';
+import { getGif } from '../js/services/api';
 
 class GifPage extends React.Component {
-  state = {
-    gif: {},
-    isFetching: true,
-  };
-
   async componentDidMount() {
-    const { match } = this.props;
+    const { match, dispatchGifInfoLoaded } = this.props;
     const gif = await getGif(match.params.id);
 
-    this.setState({
+    dispatchGifInfoLoaded({
       gif,
-      isFetching: false,
+      isGifFetching: false,
+    });
+  }
+
+  componentWillUnmount() {
+    const { dispatchGifInfoLoaded } = this.props;
+
+    dispatchGifInfoLoaded({
+      gif: {},
+      isGifFetching: true,
     });
   }
 
@@ -32,16 +39,18 @@ class GifPage extends React.Component {
   }
 
   render() {
-    const { gif, isFetching } = this.state;
+    const { gif, isGifFetching } = this.props;
 
     return (
       <div id="gif-container">
-        {isFetching ? <Loading /> : (
-          <Gif
-            gif={gif}
-          />
+        {isGifFetching ? <Loading /> : (
+          <>
+            <Gif
+              gif={gif}
+            />
+            <BackButton onRedirect={this.handleRedirect} />
+          </>
         )}
-        <BackButton onRedirect={this.handleRedirect} />
       </div>
     );
   }
@@ -60,6 +69,32 @@ GifPage.propTypes = {
   location: PropTypes.shape({
     isFirstLoadedPage: PropTypes.bool,
   }).isRequired,
+  gif: PropTypes.shape({
+    title: PropTypes.string,
+    datetime: PropTypes.string,
+    original: PropTypes.string,
+  }),
+  isGifFetching: PropTypes.bool,
+  dispatchGifInfoLoaded: PropTypes.func.isRequired,
 };
 
-export default GifPage;
+GifPage.defaultProps = {
+  gif: {},
+  isGifFetching: true,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatchGifInfoLoaded: bindActionCreators(gifInfoLoaded, dispatch),
+});
+
+const mapStateToProps = (state) => ({
+  gif: state.gif,
+  isGifFetching: state.isGifFetching,
+});
+
+const GifInfo = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(GifPage);
+
+export default GifInfo;

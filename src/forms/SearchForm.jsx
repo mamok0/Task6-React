@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import DefaultButton from '../common/DefaultButton';
-import { getSearchQuery } from '../services/api';
+import { getSearchQuery } from '../js/services/api';
 
 class SearchForm extends React.PureComponent {
   render() {
-    const { inputValue, onChange } = this.props;
+    const { inputValue, onChange, onClick } = this.props;
 
     return (
       <div id="search-form" className="container text-center mt-3">
@@ -22,7 +22,9 @@ class SearchForm extends React.PureComponent {
         <Link
           to={`/search?q=${inputValue}`}
         >
-          <DefaultButton>
+          <DefaultButton
+            onClick={onClick}
+          >
             Search
           </DefaultButton>
         </Link>
@@ -34,11 +36,13 @@ class SearchForm extends React.PureComponent {
 SearchForm.propTypes = {
   inputValue: PropTypes.string,
   onChange: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 SearchForm.defaultProps = {
   inputValue: getSearchQuery(),
   onChange: () => {},
+  onClick: () => {},
 };
 
 export default SearchForm;
