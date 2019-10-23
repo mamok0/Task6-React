@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
-import gifs from './gifs';
+import gifList from './gifList';
 import search from './search';
+import singleGif from './singleGif';
 
 const createRootReducer = (history) => combineReducers({
-  gifs,
+  gifList,
   search,
+  singleGif,
   router: connectRouter(history),
 });
 

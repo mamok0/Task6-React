@@ -1,11 +1,18 @@
-import { handleAction } from 'redux-actions';
+import { handleActions, createAction } from 'redux-actions';
 
-const search = handleAction(
-  'SEARCH_REQUEST',
-  (state, action) => (
-    Object.assign({}, state, { searchValue: action.payload.searchValue })
-  ),
-  {},
+import { getSearchQuery } from '../services/api';
+
+const searchRequest = createAction('SEARCH_REQUEST');
+
+const search = handleActions(
+  {
+    [searchRequest]: (state, action) => (
+      { ...state, searchValue: action.payload.searchValue }
+    ),
+  },
+  {
+    searchValue: getSearchQuery() || '',
+  },
 );
 
 export default search;

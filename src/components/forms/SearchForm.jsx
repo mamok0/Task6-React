@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import actions from '../../actions';
-import { getSearchQuery } from '../../services/api';
+import { getSearchQuery, createSearchLink } from '../../services/api';
 import DefaultButton from '../common/DefaultButton';
 
 class SearchForm extends React.PureComponent {
@@ -17,11 +17,10 @@ class SearchForm extends React.PureComponent {
   }
 
   handleClick = () => {
-    const { searchRequest, gifsUnloaded } = this.props;
+    const { dispatchSearchRequest, dispatchGifsUnloaded } = this.props;
     const { searchInput } = this.state;
-
-    searchRequest({ searchValue: searchInput });
-    gifsUnloaded();
+    dispatchSearchRequest({ searchValue: searchInput });
+    dispatchGifsUnloaded();
   }
 
   render() {
@@ -29,7 +28,7 @@ class SearchForm extends React.PureComponent {
 
     return (
       <div id="search-form" className="container text-center mt-3">
-        <h3>Type what are you want to find:</h3>
+        <h3>Type what do you want to find:</h3>
         <input
           id="search-input"
           type="text"
@@ -38,7 +37,7 @@ class SearchForm extends React.PureComponent {
           value={searchInput}
         />
         <Link
-          to={`/search?q=${searchInput}`}
+          to={createSearchLink(searchInput)}
         >
           <DefaultButton
             onClick={this.handleClick}
@@ -52,18 +51,22 @@ class SearchForm extends React.PureComponent {
 }
 
 SearchForm.propTypes = {
-  searchRequest: PropTypes.func.isRequired,
-  gifsUnloaded: PropTypes.func.isRequired,
+  dispatchSearchRequest: PropTypes.func.isRequired,
+  dispatchGifsUnloaded: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  searchRequest: (newSearch) => dispatch(actions.searchRequest(newSearch)),
-  gifsUnloaded: () => dispatch(actions.gifsUnloaded()),
+  dispatchSearchRequest: (newSearch) => dispatch(actions.searchRequest(newSearch)),
+  dispatchGifsUnloaded: () => dispatch(actions.gifsUnloaded()),
+});
+
+const mapStateToProps = (state) => ({
+  state,
 });
 
 
 const Search = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(SearchForm);
 

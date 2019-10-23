@@ -7,11 +7,13 @@ import App from './src/App';
 import { getSearchQuery } from './src/services/api';
 
 const initialState = {
-  gifs: {
-    gifs: [],
+  gifList: {
+    values: [],
     gifListOffset: 0,
     isGifListFetching: true,
-    gif: {},
+  },
+  singleGif: {
+    value: {},
     isGifFetching: true,
   },
   search: {
