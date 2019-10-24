@@ -1,12 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import configureStore, { history } from './src/configureStore';
 
 import App from './src/App';
+import { getSearchQuery } from './src/services/api';
 
+const initialState = {
+  gifs: {
+    gifs: [],
+    gifListOffset: 0,
+    isGifListFetching: true,
+    gif: {},
+    isGifFetching: true,
+  },
+  search: {
+    searchValue: getSearchQuery() || '',
+  },
+};
+
+const store = configureStore(initialState);
 
 ReactDOM.render((
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <Provider store={store}>
+    <App history={history} />
+  </Provider>
 ), document.getElementById('root'));

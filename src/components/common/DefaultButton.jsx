@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 class DefaultButton extends React.PureComponent {
   render() {
     const { onClick, children, isFetching } = this.props;
-
-
     return isFetching && children === 'More gifs!' ? null : (
       <>
         <button
