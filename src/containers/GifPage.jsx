@@ -10,18 +10,18 @@ import { getGif } from '../services/api';
 
 class GifPage extends React.Component {
   async componentDidMount() {
-    const { match, gifInfoLoaded } = this.props;
+    const { match, dispatchGifInfoLoaded } = this.props;
     const gif = await getGif(match.params.id);
 
-    gifInfoLoaded({
+    dispatchGifInfoLoaded({
       gif,
       isGifFetching: false,
     });
   }
 
   handleRedirect = () => {
-    const { location, history, gifInfoLoaded } = this.props;
-    gifInfoLoaded({ gif: {}, isGifFetching: true });
+    const { location, history, dispatchGifInfoLoaded } = this.props;
+    dispatchGifInfoLoaded({ gif: {}, isGifFetching: true });
     if (location.isFirstLoadedPage) {
       history.go(-1);
     }
@@ -65,7 +65,7 @@ GifPage.propTypes = {
     original: PropTypes.string,
   }),
   isGifFetching: PropTypes.bool,
-  gifInfoLoaded: PropTypes.func.isRequired,
+  dispatchGifInfoLoaded: PropTypes.func.isRequired,
 };
 
 GifPage.defaultProps = {
@@ -74,12 +74,12 @@ GifPage.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  gifInfoLoaded: (gifInfo) => dispatch(actions.gifInfoLoaded(gifInfo)),
+  dispatchGifInfoLoaded: (gifInfo) => dispatch(actions.gifInfoLoaded(gifInfo)),
 });
 
 const mapStateToProps = (state) => ({
-  gif: state.gifs.gif,
-  isGifFetching: state.gifs.isGifFetching,
+  gif: state.singleGif.value,
+  isGifFetching: state.singleGif.isGifFetching,
 });
 
 const GifInfo = connect(

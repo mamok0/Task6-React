@@ -23,7 +23,6 @@
     ],
     "rules": {
         "linebreak-style": "off",
-        "react/state-in-constructor": ["error", "never"],
-        "prefer-object-spread": "off"
+        "react/state-in-constructor": ["error", "never"]
     }
 }

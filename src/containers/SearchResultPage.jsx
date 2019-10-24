@@ -17,13 +17,13 @@ class SearchResultPage extends React.Component {
     this.loadGifs();
   }
 
-  async componentDidUpdate() {
-    const { searchValue, searchRequest, gifsUnloaded } = this.props;
+  componentDidUpdate() {
+    const { searchValue, dispatchSearchRequest, dispatchGifsUnloaded } = this.props;
     const searchTerm = getSearchQuery();
 
     if (searchValue !== searchTerm) {
-      gifsUnloaded();
-      searchRequest({
+      dispatchGifsUnloaded();
+      dispatchSearchRequest({
         searchValue: searchTerm,
       });
     }
@@ -31,22 +31,23 @@ class SearchResultPage extends React.Component {
   }
 
   handleMoreGifsClick = async () => {
-    const { gifListOffset, gifsLoaded } = this.props;
-    const response = await getMoreGifs(gifListOffset + 15);
+    const moreGifsAmount = 15;
+    const { gifListOffset, dispatchGifsLoaded } = this.props;
+    const response = await getMoreGifs(gifListOffset + moreGifsAmount);
 
-    gifsLoaded({
+    dispatchGifsLoaded({
       newGifs: response,
       isGifListFetching: false,
-      gifListOffset: gifListOffset + 15,
+      gifListOffset: gifListOffset + moreGifsAmount,
     });
   }
 
   async loadGifs() {
-    const { gifsLoaded, gifs } = this.props;
+    const { dispatchGifsLoaded, gifs } = this.props;
 
     if (gifs.length === 0) {
       const response = await getGifs();
-      gifsLoaded({
+      dispatchGifsLoaded({
         newGifs: response,
         isGifListFetching: false,
         gifListOffset: 0,
@@ -96,22 +97,22 @@ SearchResultPage.propTypes = {
   ).isRequired,
   isGifListFetching: PropTypes.bool.isRequired,
   gifListOffset: PropTypes.number.isRequired,
-  gifsLoaded: PropTypes.func.isRequired,
-  searchRequest: PropTypes.func.isRequired,
-  gifsUnloaded: PropTypes.func.isRequired,
+  dispatchGifsLoaded: PropTypes.func.isRequired,
+  dispatchSearchRequest: PropTypes.func.isRequired,
+  dispatchGifsUnloaded: PropTypes.func.isRequired,
 };
 
 
 const mapDispatchToProps = (dispatch) => ({
-  gifsLoaded: (newData) => dispatch(actions.gifsLoaded(newData)),
-  searchRequest: (newSearchRequest) => dispatch(actions.searchRequest(newSearchRequest)),
-  gifsUnloaded: () => dispatch(actions.gifsUnloaded()),
+  dispatchGifsLoaded: (newData) => dispatch(actions.gifsLoaded(newData)),
+  dispatchSearchRequest: (newSearchRequest) => dispatch(actions.searchRequest(newSearchRequest)),
+  dispatchGifsUnloaded: () => dispatch(actions.gifsUnloaded()),
 });
 
 const mapStateToProps = (state) => ({
-  gifs: state.gifs.gifs,
-  isGifListFetching: state.gifs.isGifListFetching,
-  gifListOffset: state.gifs.gifListOffset,
+  gifs: state.gifList.values,
+  isGifListFetching: state.gifList.isGifListFetching,
+  gifListOffset: state.gifList.gifListOffset,
   searchValue: state.search.searchValue,
 });
 
