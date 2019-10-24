@@ -4,8 +4,8 @@ import { gifsLoaded, gifsUnloaded } from '../actions';
 
 export const gifList = {
   values: [],
-  gifListOffset: 0,
-  isGifListFetching: true,
+  offset: 0,
+  isFetching: true,
 };
 
 export const gifListReducer = handleActions(
@@ -14,16 +14,16 @@ export const gifListReducer = handleActions(
       {
         ...state,
         values: state.values.concat(action.payload.newGifs),
-        isGifListFetching: action.payload.isGifListFetching,
-        gifListOffset: action.payload.gifListOffset,
+        isFetching: action.payload.isFetching,
+        offset: action.payload.offset,
       }
     ),
     [gifsUnloaded]: (state) => (
       {
         ...state,
         values: [],
-        isGifListFetching: true,
-        gifListOffset: 0,
+        isFetching: true,
+        offset: 0,
       }
     ),
   },

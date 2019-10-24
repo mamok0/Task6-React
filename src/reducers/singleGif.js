@@ -4,7 +4,7 @@ import { gifInfoLoaded } from '../actions';
 
 export const singleGif = {
   value: {},
-  isGifFetching: true,
+  isFetching: true,
 };
 
 export const singleGifReducer = handleActions(
@@ -13,7 +13,7 @@ export const singleGifReducer = handleActions(
       {
         ...state,
         value: action.payload.gif,
-        isGifFetching: action.payload.isGifFetching,
+        isFetching: action.payload.isFetching,
       }
     ),
   },

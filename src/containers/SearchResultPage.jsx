@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import actions from '../actions';
+import { gifsLoaded, searchRequest, gifsUnloaded } from '../actions';
 import SearchForm from '../components/forms/SearchForm';
 import GifsList from '../gifs/GifsList';
 import DefaultButton from '../components/common/DefaultButton';
@@ -32,13 +32,13 @@ class SearchResultPage extends React.Component {
 
   handleMoreGifsClick = async () => {
     const moreGifsAmount = 15;
-    const { gifListOffset, dispatchGifsLoaded } = this.props;
-    const response = await getMoreGifs(gifListOffset + moreGifsAmount);
+    const { offset, dispatchGifsLoaded } = this.props;
+    const response = await getMoreGifs(offset + moreGifsAmount);
 
     dispatchGifsLoaded({
       newGifs: response,
-      isGifListFetching: false,
-      gifListOffset: gifListOffset + moreGifsAmount,
+      isFetching: false,
+      offset: offset + moreGifsAmount,
     });
   }
 
@@ -49,8 +49,8 @@ class SearchResultPage extends React.Component {
       const response = await getGifs();
       dispatchGifsLoaded({
         newGifs: response,
-        isGifListFetching: false,
-        gifListOffset: 0,
+        isFetching: false,
+        offset: 0,
       });
     }
   }
@@ -59,7 +59,7 @@ class SearchResultPage extends React.Component {
     const {
       searchValue,
       gifs,
-      isGifListFetching,
+      isFetching,
     } = this.props;
 
     return (
@@ -67,12 +67,12 @@ class SearchResultPage extends React.Component {
         <SearchForm searchValue={searchValue} />
         <GifsList
           gifs={gifs}
-          isFetching={isGifListFetching}
+          isFetching={isFetching}
           searchInput={searchValue}
         />
         <DefaultButton
           onClick={this.handleMoreGifsClick}
-          isFetching={isGifListFetching}
+          isFetching={isFetching}
         >
           More gifs!
         </DefaultButton>
@@ -95,8 +95,8 @@ SearchResultPage.propTypes = {
       preview: PropTypes.string,
     }),
   ).isRequired,
-  isGifListFetching: PropTypes.bool.isRequired,
-  gifListOffset: PropTypes.number.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  offset: PropTypes.number.isRequired,
   dispatchGifsLoaded: PropTypes.func.isRequired,
   dispatchSearchRequest: PropTypes.func.isRequired,
   dispatchGifsUnloaded: PropTypes.func.isRequired,
@@ -104,15 +104,15 @@ SearchResultPage.propTypes = {
 
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGifsLoaded: (newData) => dispatch(actions.gifsLoaded(newData)),
-  dispatchSearchRequest: (newSearchRequest) => dispatch(actions.searchRequest(newSearchRequest)),
-  dispatchGifsUnloaded: () => dispatch(actions.gifsUnloaded()),
+  dispatchGifsLoaded: (newData) => dispatch(gifsLoaded(newData)),
+  dispatchSearchRequest: (newSearchRequest) => dispatch(searchRequest(newSearchRequest)),
+  dispatchGifsUnloaded: () => dispatch(gifsUnloaded()),
 });
 
 const mapStateToProps = (state) => ({
   gifs: state.gifList.values,
-  isGifListFetching: state.gifList.isGifListFetching,
-  gifListOffset: state.gifList.gifListOffset,
+  isFetching: state.gifList.isFetching,
+  offset: state.gifList.offset,
   searchValue: state.search.searchValue,
 });
 
