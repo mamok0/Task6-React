@@ -1,8 +1,13 @@
-import { handleActions, createAction } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 
-const gifInfoLoaded = createAction('GIF_INFO_LOADED');
+import { gifInfoLoaded } from '../actions';
 
-const singleGif = handleActions(
+export const singleGif = {
+  value: {},
+  isGifFetching: true,
+};
+
+export const singleGifReducer = handleActions(
   {
     [gifInfoLoaded]: (state, action) => (
       {
@@ -12,10 +17,7 @@ const singleGif = handleActions(
       }
     ),
   },
-  {
-    value: {},
-    isGifFetching: true,
-  },
+  singleGif,
 );
 
-export default singleGif;
+export default { singleGif, singleGifReducer };

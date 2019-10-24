@@ -1,18 +1,14 @@
-import { createActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
 
-const actions = createActions({
-  SEARCH_REQUEST: ({ searchValue }) => ({ searchValue }),
-  GIFS_LOADED: ({ newGifs, isGifListFetching, gifListOffset }) => ({
-    newGifs,
-    isGifListFetching,
-    gifListOffset,
-  }),
-  GIFS_UNLOADED: () => ({
-    newGifs: [],
-    isGifListFetching: true,
-    gifListOffset: 0,
-  }),
-  GIF_INFO_LOADED: ({ gif, isGifFetching }) => ({ gif, isGifFetching }),
-});
+export const gifsLoaded = createAction('GIFS_LOADED');
+export const gifsUnloaded = createAction('GIFS_UNLOADED');
+export const searchRequest = createAction('SEARCH_REQUEST');
+export const gifInfoLoaded = createAction('GIF_INFO_LOADED');
 
-export default actions;
+
+export default {
+  gifsLoaded,
+  gifsUnloaded,
+  gifInfoLoaded,
+  searchRequest,
+};

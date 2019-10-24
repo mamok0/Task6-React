@@ -1,9 +1,14 @@
-import { handleActions, createAction } from 'redux-actions';
+import { handleActions } from 'redux-actions';
 
-const gifsLoaded = createAction('GIFS_LOADED');
-const gifsUnloaded = createAction('GIFS_UNLOADED');
+import { gifsLoaded, gifsUnloaded } from '../actions';
 
-const gifs = handleActions(
+export const gifList = {
+  values: [],
+  gifListOffset: 0,
+  isGifListFetching: true,
+};
+
+export const gifListReducer = handleActions(
   {
     [gifsLoaded]: (state, action) => (
       {
@@ -22,11 +27,7 @@ const gifs = handleActions(
       }
     ),
   },
-  {
-    values: [],
-    gifListOffset: 0,
-    isGifListFetching: true,
-  },
+  gifList,
 );
 
-export default gifs;
+export default { gifList, gifListReducer };
