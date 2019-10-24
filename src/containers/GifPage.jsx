@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import actions from '../actions';
+import { gifInfoLoaded } from '../actions';
 import Gif from '../gifs/Gif';
 import Loading from '../components/common/Loading';
 import BackButton from '../components/common/BackButton';
@@ -15,13 +15,13 @@ class GifPage extends React.Component {
 
     dispatchGifInfoLoaded({
       gif,
-      isGifFetching: false,
+      isFetching: false,
     });
   }
 
   handleRedirect = () => {
     const { location, history, dispatchGifInfoLoaded } = this.props;
-    dispatchGifInfoLoaded({ gif: {}, isGifFetching: true });
+    dispatchGifInfoLoaded({ gif: {}, isFetching: true });
     if (location.isFirstLoadedPage) {
       history.go(-1);
     }
@@ -29,11 +29,11 @@ class GifPage extends React.Component {
   }
 
   render() {
-    const { gif, isGifFetching } = this.props;
+    const { gif, isFetching } = this.props;
 
     return (
       <div id="gif-container">
-        {isGifFetching ? <Loading /> : (
+        {isFetching ? <Loading /> : (
           <>
             <Gif
               gif={gif}
@@ -64,22 +64,22 @@ GifPage.propTypes = {
     datetime: PropTypes.string,
     original: PropTypes.string,
   }),
-  isGifFetching: PropTypes.bool,
+  isFetching: PropTypes.bool,
   dispatchGifInfoLoaded: PropTypes.func.isRequired,
 };
 
 GifPage.defaultProps = {
   gif: {},
-  isGifFetching: true,
+  isFetching: true,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGifInfoLoaded: (gifInfo) => dispatch(actions.gifInfoLoaded(gifInfo)),
+  dispatchGifInfoLoaded: (gifInfo) => dispatch(gifInfoLoaded(gifInfo)),
 });
 
 const mapStateToProps = (state) => ({
   gif: state.singleGif.value,
-  isGifFetching: state.singleGif.isGifFetching,
+  isFetching: state.singleGif.isFetching,
 });
 
 const GifInfo = connect(

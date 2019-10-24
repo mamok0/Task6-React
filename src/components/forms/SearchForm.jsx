@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import actions from '../../actions';
+import { gifsUnloaded, searchRequest } from '../../actions';
 import { getSearchQuery, createSearchLink } from '../../services/api';
 import DefaultButton from '../common/DefaultButton';
 
@@ -56,8 +56,8 @@ SearchForm.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchSearchRequest: (newSearch) => dispatch(actions.searchRequest(newSearch)),
-  dispatchGifsUnloaded: () => dispatch(actions.gifsUnloaded()),
+  dispatchSearchRequest: (newSearch) => dispatch(searchRequest(newSearch)),
+  dispatchGifsUnloaded: () => dispatch(gifsUnloaded()),
 });
 
 const mapStateToProps = (state) => ({

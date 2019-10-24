@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 
 import configureStore, { history } from './src/configureStore';
 import App from './src/App';
-import { initialState } from './src/reducers/index';
+import { initialState } from './src/reducers';
 
 const store = configureStore(initialState);
 
