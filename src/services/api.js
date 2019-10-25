@@ -14,9 +14,9 @@ export function getSearchQuery() {
   return searchParams.get('q');
 }
 
-async function getApiResponse(params) {
+export async function getGifs(params) {
   const queryParams = {
-    q: encodeURI(params.q || getSearchQuery()),
+    q: encodeURI(getSearchQuery()),
     limit: params.limit || '15',
     offset: params.offset || '0',
     rating: params.rating || 'G',
@@ -29,17 +29,7 @@ async function getApiResponse(params) {
   return modelGifsData;
 }
 
-export async function getGifs(q) {
-  return getApiResponse({ q });
-}
-
-export async function getMoreGifs(offset) {
-  return getApiResponse({ offset });
-}
-
-export async function getGif() {
-  let id = window.location.pathname.split('/');
-  id = id[id.length - 1];
+export async function getGif(id) {
   const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({})}`);
   const gifData = await response.json();
   return new GifModel(gifData.data);
@@ -52,7 +42,6 @@ export function createSearchLink(searchTerm) {
 export default {
   getGifs,
   getGif,
-  getMoreGifs,
   getQuery,
   getSearchQuery,
   createSearchLink,

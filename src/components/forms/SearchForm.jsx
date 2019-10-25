@@ -17,10 +17,10 @@ class SearchForm extends React.PureComponent {
   }
 
   handleClick = () => {
-    const { dispatchSearchRequest, dispatchGifsUnloaded } = this.props;
+    const { dispatchSearchRequest, dispatchResetGifs } = this.props;
     const { searchInput } = this.state;
     dispatchSearchRequest({ searchValue: searchInput });
-    dispatchGifsUnloaded();
+    dispatchResetGifs();
   }
 
   render() {
@@ -52,12 +52,12 @@ class SearchForm extends React.PureComponent {
 
 SearchForm.propTypes = {
   dispatchSearchRequest: PropTypes.func.isRequired,
-  dispatchGifsUnloaded: PropTypes.func.isRequired,
+  dispatchResetGifs: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchSearchRequest: (newSearch) => dispatch(searchRequest(newSearch)),
-  dispatchGifsUnloaded: () => dispatch(gifsUnloaded()),
+  dispatchResetGifs: () => dispatch(gifsUnloaded()),
 });
 
 const mapStateToProps = (state) => ({
