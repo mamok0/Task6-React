@@ -37,7 +37,9 @@ export async function getMoreGifs(offset) {
   return getApiResponse({ offset });
 }
 
-export async function getGif(id) {
+export async function getGif() {
+  let id = window.location.pathname.split('/');
+  id = id[id.length - 1];
   const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({})}`);
   const gifData = await response.json();
   return new GifModel(gifData.data);

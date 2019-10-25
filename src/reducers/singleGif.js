@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import { gifInfoLoaded } from '../actions';
+import { gifInfoLoaded, gifInfoUnloaded } from '../actions';
 
 export const singleGif = {
   value: {},
@@ -14,6 +14,13 @@ export const singleGifReducer = handleActions(
         ...state,
         value: action.payload.gif,
         isFetching: action.payload.isFetching,
+      }
+    ),
+    [gifInfoUnloaded]: (state) => (
+      {
+        ...state,
+        value: {},
+        isFetching: true,
       }
     ),
   },
