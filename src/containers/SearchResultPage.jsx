@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { gifsLoaded, searchRequest, gifsUnloaded } from '../actions';
+import { searchRequest, gifsUnloaded, fetchGifList } from '../actions';
 import SearchForm from '../components/forms/SearchForm';
 import GifsList from '../gifs/GifsList';
 import DefaultButton from '../components/common/DefaultButton';
 import {
-  getGifs,
-  getMoreGifs,
   getSearchQuery,
 } from '../services/api';
 
@@ -33,25 +31,14 @@ class SearchResultPage extends React.Component {
   handleMoreGifsClick = async () => {
     const moreGifsAmount = 15;
     const { offset, dispatchGifsLoaded } = this.props;
-    const response = await getMoreGifs(offset + moreGifsAmount);
-
-    dispatchGifsLoaded({
-      newGifs: response,
-      isFetching: false,
-      offset: offset + moreGifsAmount,
-    });
+    dispatchGifsLoaded(offset + moreGifsAmount);
   }
 
   async loadGifs() {
     const { dispatchGifsLoaded, gifs } = this.props;
 
     if (gifs.length === 0) {
-      const response = await getGifs();
-      dispatchGifsLoaded({
-        newGifs: response,
-        isFetching: false,
-        offset: 0,
-      });
+      dispatchGifsLoaded(gifs.length);
     }
   }
 
@@ -104,7 +91,7 @@ SearchResultPage.propTypes = {
 
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGifsLoaded: (newData) => dispatch(gifsLoaded(newData)),
+  dispatchGifsLoaded: (offset) => dispatch(fetchGifList(offset)),
   dispatchSearchRequest: (newSearchRequest) => dispatch(searchRequest(newSearchRequest)),
   dispatchGifsUnloaded: () => dispatch(gifsUnloaded()),
 });
