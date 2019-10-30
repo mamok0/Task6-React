@@ -7,6 +7,7 @@ import {
   deletingSubmitted,
   addingSubmitted,
 } from '../actions';
+import { createApiRequest } from '../services/api';
 
 export const singleGif = {
   value: {},
@@ -30,29 +31,17 @@ export const singleGifReducer = handleActions(
       }
     ),
     [editingSubmitted]: (state, action) => {
-      const request = {
-        method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data' },
-        body: JSON.stringify(action.payload),
-      };
+      const request = createApiRequest('POST', 'application/json', JSON.stringify(action.payload));
       console.log(request);
       return state;
     },
     [deletingSubmitted]: (state, action) => {
-      const request = {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(action.payload),
-      };
+      const request = createApiRequest('DELETE', 'application/json', JSON.stringify(action.payload));
       console.log(request);
       return state;
     },
     [addingSubmitted]: (state, action) => {
-      const request = {
-        method: 'POST',
-        headers: { 'Content-Type': 'form-data' },
-        body: action.payload,
-      };
+      const request = createApiRequest('POST', 'multipart/form-data', action.payload);
       console.log(request);
       return state;
     },
