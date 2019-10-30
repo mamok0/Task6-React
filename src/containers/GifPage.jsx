@@ -9,13 +9,13 @@ import BackButton from '../components/common/BackButton';
 
 class GifPage extends React.Component {
   async componentDidMount() {
-    const { dispatchGifInfoLoaded } = this.props;
-    dispatchGifInfoLoaded();
+    const { dispatchGifInfoLoaded, match } = this.props;
+    dispatchGifInfoLoaded(match.params.id);
   }
 
   handleRedirect = () => {
-    const { location, history, dispatchGifInfoUnloaded } = this.props;
-    dispatchGifInfoUnloaded();
+    const { location, history, dispatchResetGifInfo } = this.props;
+    dispatchResetGifInfo();
     if (location.isFirstLoadedPage) {
       history.go(-1);
     }
@@ -60,7 +60,7 @@ GifPage.propTypes = {
   }),
   isFetching: PropTypes.bool,
   dispatchGifInfoLoaded: PropTypes.func.isRequired,
-  dispatchGifInfoUnloaded: PropTypes.func.isRequired,
+  dispatchResetGifInfo: PropTypes.func.isRequired,
 };
 
 GifPage.defaultProps = {
@@ -69,8 +69,8 @@ GifPage.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGifInfoLoaded: () => dispatch(fetchSingleGif()),
-  dispatchGifInfoUnloaded: () => dispatch(gifInfoUnloaded()),
+  dispatchGifInfoLoaded: (id) => dispatch(fetchSingleGif(id)),
+  dispatchResetGifInfo: () => dispatch(gifInfoUnloaded()),
 });
 
 const mapStateToProps = (state) => ({

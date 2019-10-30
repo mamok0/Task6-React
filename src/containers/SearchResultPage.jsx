@@ -16,11 +16,11 @@ class SearchResultPage extends React.Component {
   }
 
   componentDidUpdate() {
-    const { searchValue, dispatchSearchRequest, dispatchGifsUnloaded } = this.props;
+    const { searchValue, dispatchSearchRequest, dispatchResetGifs } = this.props;
     const searchTerm = getSearchQuery();
 
     if (searchValue !== searchTerm) {
-      dispatchGifsUnloaded();
+      dispatchResetGifs();
       dispatchSearchRequest({
         searchValue: searchTerm,
       });
@@ -86,14 +86,14 @@ SearchResultPage.propTypes = {
   offset: PropTypes.number.isRequired,
   dispatchGifsLoaded: PropTypes.func.isRequired,
   dispatchSearchRequest: PropTypes.func.isRequired,
-  dispatchGifsUnloaded: PropTypes.func.isRequired,
+  dispatchResetGifs: PropTypes.func.isRequired,
 };
 
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchGifsLoaded: (offset) => dispatch(fetchGifList(offset)),
   dispatchSearchRequest: (newSearchRequest) => dispatch(searchRequest(newSearchRequest)),
-  dispatchGifsUnloaded: () => dispatch(gifsUnloaded()),
+  dispatchResetGifs: () => dispatch(gifsUnloaded()),
 });
 
 const mapStateToProps = (state) => ({
