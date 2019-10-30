@@ -5,6 +5,7 @@ import {
   gifInfoUnloaded,
   editingSubmitted,
   deletingSubmitted,
+  addingSubmitted,
 } from '../actions';
 
 export const singleGif = {
@@ -31,14 +32,28 @@ export const singleGifReducer = handleActions(
     [editingSubmitted]: (state, action) => {
       const request = {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'Content-Type': 'multipart/form-data' },
         body: JSON.stringify(action.payload),
       };
       console.log(request);
       return state;
     },
     [deletingSubmitted]: (state, action) => {
-      console.log(action.payload);
+      const request = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(action.payload),
+      };
+      console.log(request);
+      return state;
+    },
+    [addingSubmitted]: (state, action) => {
+      const request = {
+        method: 'POST',
+        headers: { 'Content-Type': 'form-data' },
+        body: action.payload,
+      };
+      console.log(request);
       return state;
     },
   },
