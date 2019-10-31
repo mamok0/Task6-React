@@ -3,24 +3,24 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { addingSubmitted } from '../../actions';
-import DefaultButton from '../common/DefaultButton';
+import GifForm from './gifForm';
 
-class AddGif extends React.PureComponent {
+class AddGif extends React.Component {
   state= {
     gif: null,
     title: '',
     datetime: '',
   }
 
-  changeGif = (event) => {
+  handleChangeGifFile = (event) => {
     this.setState({ gif: event.target });
   }
 
-  changeTitle = (event) => {
+  handleChangeTitle = (event) => {
     this.setState({ title: event.target.value });
   }
 
-  changeDatetime = (event) => {
+  handleChangeDatetime = (event) => {
     this.setState({ datetime: event.target.value });
   }
 
@@ -36,31 +36,25 @@ class AddGif extends React.PureComponent {
   }
 
   render() {
+    const { title, datetime } = this.state;
+
     return (
-      <div className="container mt-3" id="edit-form">
+      <div className="container mt-3 text-left" id="edit-form">
         <h3>Adding gif:</h3>
-        Gif:
+        <label htmlFor="file">
+          Gif:
+          <br />
+          <input type="file" id="file" onChange={this.handleChangeGifFile} className=".form-control" />
+        </label>
         <br />
-        <input type="file" id="gif" onChange={this.changeGif} className=".form-control" />
-        <br />
-        Title:
-        <input
-          type="text"
-          className="form-control"
-          onChange={this.changeTitle}
+        <GifForm
+          title={title}
+          datetime={datetime}
+          submitAction={this.submitAdding}
+          changeDatetime={this.handleChangeDatetime}
+          changeTitle={this.handleChangeTitle}
+          onCancel={this.handleCancel}
         />
-        Import datetime:
-        <input
-          type="text"
-          className="form-control"
-          onChange={this.changeDatetime}
-        />
-        <DefaultButton onClick={this.submitAdding}>
-          Add
-        </DefaultButton>
-        <DefaultButton onClick={this.handleCancel}>
-          Cancel
-        </DefaultButton>
       </div>
     );
   }

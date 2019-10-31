@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { editingSubmitted } from '../../actions';
-import DefaultButton from '../common/DefaultButton';
+import GifForm from './gifForm';
 
-class EditGif extends React.PureComponent {
+class EditGif extends React.Component {
   state= {
     // eslint-disable-next-line react/destructuring-assignment
     title: this.props.gif.title,
@@ -13,11 +13,11 @@ class EditGif extends React.PureComponent {
     datetime: this.props.gif.datetime,
   }
 
-  changeTitle = (event) => {
+  handleChangeTitle = (event) => {
     this.setState({ title: event.target.value });
   }
 
-  changeDatetime = (event) => {
+  handleChangeDatetime = (event) => {
     this.setState({ datetime: event.target.value });
   }
 
@@ -34,26 +34,14 @@ class EditGif extends React.PureComponent {
     return (
       <div className="container mt-3" id="edit-form">
         <h3>Editing gif:</h3>
-        Title:
-        <input
-          type="text"
-          className="form-control"
-          onChange={this.changeTitle}
-          value={title}
+        <GifForm
+          title={title}
+          datetime={datetime}
+          submitAction={this.submitEditing}
+          changeDatetime={this.handleChangeDatetime}
+          changeTitle={this.handleChangeTitle}
+          onCancel={onCancel}
         />
-        Import datetime:
-        <input
-          type="text"
-          className="form-control"
-          onChange={this.changeDatetime}
-          value={datetime}
-        />
-        <DefaultButton onClick={this.submitEditing}>
-          Save
-        </DefaultButton>
-        <DefaultButton onClick={onCancel}>
-          Cancel
-        </DefaultButton>
       </div>
     );
   }

@@ -6,12 +6,16 @@ import {
   editingSubmitted,
   deletingSubmitted,
   addingSubmitted,
+  switchDeleting,
+  switchEditing,
 } from '../actions';
 import { createApiRequest } from '../services/api';
 
 export const singleGif = {
   value: {},
   isFetching: true,
+  isEditing: false,
+  isDeleting: false,
 };
 
 export const singleGifReducer = handleActions(
@@ -45,6 +49,18 @@ export const singleGifReducer = handleActions(
       console.log(request);
       return state;
     },
+    [switchDeleting]: (state) => (
+      {
+        ...state,
+        isDeleting: !state.isDeleting,
+      }
+    ),
+    [switchEditing]: (state) => (
+      {
+        ...state,
+        isEditing: !state.isEditing,
+      }
+    ),
   },
   singleGif,
 );
