@@ -32,14 +32,14 @@ class EditGif extends React.Component {
     const { onCancel } = this.props;
     const { title, datetime } = this.state;
     return (
-      <div className="container mt-3" id="edit-form">
+      <div className="container mt-3">
         <h3>Editing gif:</h3>
         <GifForm
           title={title}
           datetime={datetime}
-          submitAction={this.submitEditing}
-          changeDatetime={this.handleChangeDatetime}
-          changeTitle={this.handleChangeTitle}
+          onSubmitAction={this.submitEditing}
+          onChangeDatetime={this.handleChangeDatetime}
+          onChangeTitle={this.handleChangeTitle}
           onCancel={onCancel}
         />
       </div>
