@@ -8,7 +8,7 @@ class BackButton extends React.PureComponent {
     const { onRedirect } = this.props;
     return (
       <DefaultButton onClick={onRedirect}>
-        Okay, let\'s go back
+        Okay, let's go back
       </DefaultButton>
     );
   }
