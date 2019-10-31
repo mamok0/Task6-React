@@ -7,10 +7,8 @@ import Main from './Main';
 
 const App = ({ history }) => (
   <ConnectedRouter history={history}>
-    <div className="text-center">
-      <Header />
-      <Main />
-    </div>
+    <Header />
+    <Main />
   </ConnectedRouter>
 );
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { searchRequest, gifsUnloaded, fetchGifList } from '../actions';
-import SearchForm from '../components/forms/SearchForm';
+import SearchForm from '../components/forms/Search';
 import GifsList from '../gifs/GifsList';
 import DefaultButton from '../components/common/DefaultButton';
 import {

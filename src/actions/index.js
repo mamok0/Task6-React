@@ -7,6 +7,9 @@ export const gifsUnloaded = createAction('GIFS_UNLOADED');
 export const searchRequest = createAction('SEARCH_REQUEST');
 export const gifInfoLoaded = createAction('GIF_INFO_LOADED');
 export const gifInfoUnloaded = createAction('GIF_INFO_UNLOADED');
+export const editingSubmitted = createAction('EDITING_SUBMITTED');
+export const deletingSubmitted = createAction('DELETING_SUBMITTED');
+export const addingSubmitted = createAction('ADDING_SUBMITTED');
 
 
 export default {
@@ -17,4 +20,6 @@ export default {
   gifInfoLoaded,
   gifInfoUnloaded,
   searchRequest,
+  editingSubmitted,
+  deletingSubmitted,
 };

@@ -4,10 +4,18 @@ import { connect } from 'react-redux';
 
 import { fetchSingleGif, gifInfoUnloaded } from '../actions';
 import Gif from '../gifs/Gif';
+import Edit from '../components/forms/Edit';
+import Delete from '../components/forms/Delete';
 import Loading from '../components/common/Loading';
 import BackButton from '../components/common/BackButton';
+import DefaultButton from '../components/common/DefaultButton';
 
 class GifPage extends React.Component {
+  state = {
+    isEditing: false,
+    isDeleting: false,
+  }
+
   async componentDidMount() {
     const { dispatchGifInfoLoaded, match } = this.props;
     dispatchGifInfoLoaded(match.params.id);
@@ -22,8 +30,35 @@ class GifPage extends React.Component {
     history.push('/');
   }
 
+  handleEdit = () => {
+    this.setState({ isEditing: true });
+  }
+
+  handleDelete = () => {
+    this.setState({ isDeleting: true });
+  }
+
+  handleCancel = () => {
+    this.setState({ isEditing: false, isDeleting: false });
+  }
+
   render() {
-    const { gif, isFetching } = this.props;
+    const { gif, isFetching, match } = this.props;
+    const { isEditing, isDeleting } = this.state;
+
+    if (isEditing) {
+      return <Edit onClick={this.handleEdit} onCancel={this.handleCancel} gif={gif} />;
+    }
+
+    if (isDeleting) {
+      return (
+        <Delete
+          onClick={this.handleDelete}
+          onCancel={this.handleCancel}
+          id={match.params.id}
+        />
+      );
+    }
 
     return (
       <div id="gif-container">
@@ -32,6 +67,8 @@ class GifPage extends React.Component {
             <Gif
               gif={gif}
             />
+            <DefaultButton onClick={this.handleEdit}>Edit</DefaultButton>
+            <DefaultButton onClick={this.handleDelete}>Delete</DefaultButton>
             <BackButton onRedirect={this.handleRedirect} />
           </>
         )}

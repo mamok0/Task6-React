@@ -39,10 +39,19 @@ export function createSearchLink(searchTerm) {
   return `/search?q=${searchTerm}`;
 }
 
+export function createApiRequest(method, dataType, body) {
+  return {
+    method,
+    headers: { 'Content-Type': dataType },
+    body,
+  };
+}
+
 export default {
   getGifs,
   getGif,
   getQuery,
   getSearchQuery,
   createSearchLink,
+  createApiRequest,
 };
