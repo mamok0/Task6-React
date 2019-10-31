@@ -6,7 +6,13 @@ import {
   all,
 } from 'redux-saga/effects';
 
-import { gifsLoaded, gifInfoLoaded } from '../actions';
+import {
+  gifsLoaded,
+  gifInfoLoaded,
+  addingSubmitted,
+  deletingSubmitted,
+  editingSubmitted,
+} from '../actions';
 import { getGifs, getGif, createApiRequest } from '../services/api';
 
 
@@ -27,7 +33,7 @@ function deleteGif(action) {
 }
 
 function addGif(action) {
-  const request = createApiRequest('POST', 'multipart/form-data', action.payload);
+  const request = createApiRequest('PUT', 'multipart/form-data', action.payload);
   console.log(request);
 }
 
@@ -45,15 +51,15 @@ function* watchFetchSingleGif() {
 }
 
 function* watchDeleteGifRequest() {
-  yield takeLatest('DELETING_SUBMITTED', deleteGif);
+  yield takeLatest(deletingSubmitted, deleteGif);
 }
 
 function* watchAddGifRequest() {
-  yield takeLatest('ADDING_SUBMITTED', addGif);
+  yield takeLatest(addingSubmitted, addGif);
 }
 
 function* watchEditGifRequest() {
-  yield takeLatest('EDITING_SUBMITTED', editGif);
+  yield takeLatest(editingSubmitted, editGif);
 }
 
 export default function* rootSaga() {

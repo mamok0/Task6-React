@@ -1,8 +1,7 @@
 import GifModel from './gifModel';
 
 export function getQuery(queryParams) {
-  let url = '?api_key=Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2&';
-
+  let url = '?';
   Object.entries(queryParams).forEach(([key, value]) => {
     url += `${key}=${value}&`;
   });
@@ -16,6 +15,7 @@ export function getSearchQuery() {
 
 export async function getGifs(params) {
   const queryParams = {
+    api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2',
     q: encodeURI(getSearchQuery()),
     limit: params.limit || '15',
     offset: params.offset || '0',
@@ -30,13 +30,15 @@ export async function getGifs(params) {
 }
 
 export async function getGif(id) {
-  const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({})}`);
+  const response = await fetch(`https://api.giphy.com/v1/gifs/${id + getQuery({
+    api_key: 'Oku2KgMLfkiQB8ws3zBwc5BLDSQHvzk2',
+  })}`);
   const gifData = await response.json();
   return new GifModel(gifData.data);
 }
 
 export function createSearchLink(searchTerm) {
-  return `/search?q=${searchTerm}`;
+  return `/search${getQuery({ q: searchTerm })}`;
 }
 
 export function createApiRequest(method, dataType, body) {

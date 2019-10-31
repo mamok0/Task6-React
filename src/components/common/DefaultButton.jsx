@@ -5,15 +5,13 @@ class DefaultButton extends React.PureComponent {
   render() {
     const { onClick, children, isFetching } = this.props;
     return isFetching && children === 'More gifs!' ? null : (
-      <>
-        <button
-          type="button"
-          className="btn btn-success m-2"
-          onClick={onClick}
-        >
-          {children}
-        </button>
-      </>
+      <button
+        type="button"
+        className="btn btn-success m-2"
+        onClick={onClick}
+      >
+        {children}
+      </button>
     );
   }
 }
