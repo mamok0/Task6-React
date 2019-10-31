@@ -7,9 +7,9 @@ class GifForm extends React.PureComponent {
   render() {
     const {
       onCancel,
-      submitAction,
-      changeDatetime,
-      changeTitle,
+      onSubmitAction,
+      onChangeDatetime,
+      onChangeTitle,
       datetime,
       title,
     } = this.props;
@@ -21,23 +21,23 @@ class GifForm extends React.PureComponent {
             type="text"
             id="title"
             className="form-control"
-            onChange={changeTitle}
+            onChange={onChangeTitle}
             value={title}
           />
         </label>
         <br />
-        <label htmlFor="title">
+        <label htmlFor="dateTime">
           Import datetime:
           <input
             type="text"
-            id="datetime"
+            id="dateTime"
             className="form-control"
-            onChange={changeDatetime}
+            onChange={onChangeDatetime}
             value={datetime}
           />
         </label>
         <br />
-        <DefaultButton onClick={submitAction}>
+        <DefaultButton onClick={onSubmitAction}>
           Save
         </DefaultButton>
         <DefaultButton onClick={onCancel}>
@@ -51,10 +51,10 @@ class GifForm extends React.PureComponent {
 GifForm.propTypes = {
   title: PropTypes.string,
   datetime: PropTypes.string,
-  changeDatetime: PropTypes.func.isRequired,
-  changeTitle: PropTypes.func.isRequired,
+  onChangeDatetime: PropTypes.func.isRequired,
+  onChangeTitle: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  submitAction: PropTypes.func.isRequired,
+  onSubmitAction: PropTypes.func.isRequired,
 };
 
 GifForm.defaultProps = {

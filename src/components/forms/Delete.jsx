@@ -15,7 +15,7 @@ class DeleteGif extends React.Component {
   render() {
     const { onCancel } = this.props;
     return (
-      <div className="container mt-3" id="edit-form">
+      <div className="container mt-3">
         <h3>Are you sure you want to delete this gif?</h3>
         <DefaultButton onClick={this.deleteGif}>
           Yes

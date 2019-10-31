@@ -39,22 +39,24 @@ class AddGif extends React.Component {
     const { title, datetime } = this.state;
 
     return (
-      <div className="container mt-3 text-left" id="edit-form">
+      <div className="container mt-3 text-left">
         <h3>Adding gif:</h3>
-        <label htmlFor="file">
-          Gif:
+        <form>
+          <label htmlFor="file">
+            Gif:
+            <br />
+            <input type="file" id="file" onChange={this.handleChangeGifFile} className="form-control" />
+          </label>
           <br />
-          <input type="file" id="file" onChange={this.handleChangeGifFile} className=".form-control" />
-        </label>
-        <br />
-        <GifForm
-          title={title}
-          datetime={datetime}
-          submitAction={this.submitAdding}
-          changeDatetime={this.handleChangeDatetime}
-          changeTitle={this.handleChangeTitle}
-          onCancel={this.handleCancel}
-        />
+          <GifForm
+            title={title}
+            datetime={datetime}
+            onSubmitAction={this.submitAdding}
+            onChangeDatetime={this.handleChangeDatetime}
+            onChangeTitle={this.handleChangeTitle}
+            onCancel={this.handleCancel}
+          />
+        </form>
       </div>
     );
   }
