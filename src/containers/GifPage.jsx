@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { fetchSingleGif, gifInfoUnloaded } from '../actions';
+import {
+  fetchSingleGif,
+  gifInfoUnloaded,
+  switchDeleting,
+  switchEditing,
+} from '../actions';
 import Gif from '../gifs/Gif';
 import Edit from '../components/forms/Edit';
 import Delete from '../components/forms/Delete';
@@ -11,11 +16,6 @@ import BackButton from '../components/common/BackButton';
 import DefaultButton from '../components/common/DefaultButton';
 
 class GifPage extends React.Component {
-  state = {
-    isEditing: false,
-    isDeleting: false,
-  }
-
   async componentDidMount() {
     const { dispatchGifInfoLoaded, match } = this.props;
     dispatchGifInfoLoaded(match.params.id);
@@ -31,20 +31,37 @@ class GifPage extends React.Component {
   }
 
   handleEdit = () => {
-    this.setState({ isEditing: true });
+    const { dispatchSwitchEditing } = this.props;
+    dispatchSwitchEditing();
   }
 
   handleDelete = () => {
-    this.setState({ isDeleting: true });
+    const { dispatchSwitchDeleting } = this.props;
+    dispatchSwitchDeleting();
   }
 
   handleCancel = () => {
-    this.setState({ isEditing: false, isDeleting: false });
+    const {
+      dispatchSwitchDeleting,
+      dispatchSwitchEditing,
+      isEditing,
+    } = this.props;
+
+    if (isEditing) {
+      dispatchSwitchEditing();
+    } else {
+      dispatchSwitchDeleting();
+    }
   }
 
   render() {
-    const { gif, isFetching, match } = this.props;
-    const { isEditing, isDeleting } = this.state;
+    const {
+      gif,
+      isFetching,
+      match,
+      isEditing,
+      isDeleting,
+    } = this.props;
 
     if (isEditing) {
       return <Edit onClick={this.handleEdit} onCancel={this.handleCancel} gif={gif} />;
@@ -53,7 +70,6 @@ class GifPage extends React.Component {
     if (isDeleting) {
       return (
         <Delete
-          onClick={this.handleDelete}
           onCancel={this.handleCancel}
           id={match.params.id}
         />
@@ -96,8 +112,12 @@ GifPage.propTypes = {
     original: PropTypes.string,
   }),
   isFetching: PropTypes.bool,
+  isEditing: PropTypes.bool.isRequired,
+  isDeleting: PropTypes.bool.isRequired,
   dispatchGifInfoLoaded: PropTypes.func.isRequired,
   dispatchResetGifInfo: PropTypes.func.isRequired,
+  dispatchSwitchEditing: PropTypes.func.isRequired,
+  dispatchSwitchDeleting: PropTypes.func.isRequired,
 };
 
 GifPage.defaultProps = {
@@ -108,11 +128,15 @@ GifPage.defaultProps = {
 const mapDispatchToProps = (dispatch) => ({
   dispatchGifInfoLoaded: (id) => dispatch(fetchSingleGif(id)),
   dispatchResetGifInfo: () => dispatch(gifInfoUnloaded()),
+  dispatchSwitchEditing: () => dispatch(switchEditing()),
+  dispatchSwitchDeleting: () => dispatch(switchDeleting()),
 });
 
 const mapStateToProps = (state) => ({
   gif: state.singleGif.value,
   isFetching: state.singleGif.isFetching,
+  isEditing: state.singleGif.isEditing,
+  isDeleting: state.singleGif.isDeleting,
 });
 
 const GifInfo = connect(
